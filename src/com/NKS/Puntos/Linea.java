@@ -13,16 +13,16 @@ public class Linea {
 		if (pos<lineas.getLenght()){
 			System.out.println("11");
 			Linea line = (Linea) lineas.getElement(pos);
-			if (Turn.Punto2==line.Punto1 || Turn.Punto1 == line.Punto2) {
+			if (Turn.Punto2==line.Punto1 ) {
 //				Una sola dirección para la prueba, luego lo vemos
 				conexion= new Linea(Turn.Punto1,line.Punto2);
 				System.out.println("12");
 			
 				
 				
-//			}if (Turn.Punto1==line.Punto2) {
-//				conexion= new Linea(line.Punto1,Turn.Punto2);
-//				System.out.println("13");
+			}if (Turn.Punto1==line.Punto2) {
+				conexion= new Linea(line.Punto1,Turn.Punto2);
+				System.out.println("13");
 //				
 			}else {
 				Point(lineas,++pos,Turn,conexion);
