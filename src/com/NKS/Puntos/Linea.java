@@ -11,45 +11,51 @@ public class Linea {
 	}
 	public void Point(List lineas,int pos,Linea Turn, Linea conexion) {
 		if (pos<lineas.getLenght()){
-			System.out.println("11");
 			Linea line = (Linea) lineas.getElement(pos);
-			if (Turn.Punto2==line.Punto1 ) {
-//				Una sola dirección para la prueba, luego lo vemos
+
+			if (Turn.Punto2==line.Punto1) {
 				conexion= new Linea(Turn.Punto1,line.Punto2);
-				System.out.println("12");
+				point2(lineas,0,conexion,"Derecha",2);
 			
 				
 				
 			}if (Turn.Punto1==line.Punto2) {
 				conexion= new Linea(line.Punto1,Turn.Punto2);
 				System.out.println("13");
-//				
+				point2(lineas,0,conexion,"Izquierda",2);
+				
 			}else {
 				Point(lineas,++pos,Turn,conexion);
-				System.out.println("14");
 			}
-		} else {
+		}else {
 			System.out.println("no hay punto");
 		}
 	}
-//	public void point2(List lineas,int pos, Linea conexion) {
-//		if (pos<lineas.getLenght()) {
-//			Linea line= (Linea) lineas.getElement(pos);
-//			System.out.println("21");
-//			if(conexion.Punto1!=line.Punto2) {
-//				System.out.println("22");
-//				if (conexion.Punto2==line.Punto1) {
-//					conexion.Punto2=line.Punto2;
-//					point2(lineas,++pos,conexion);
-//					System.out.println("23");
-//				} else {
-//				System.out.println("hay punto");
-//					}
-//				}
-//		}else {
-//			System.out.println("no hay punto");
-//		}
-//
-//	}	
-
-}
+	public synchronized void  point2(List lineas,int pos, Linea conexion,String Dir,int pts) {
+		if (Dir=="Derecha") {
+			if (pos<lineas.getLenght()) {
+				Linea line= (Linea) lineas.getElement(pos);
+				if(conexion.Punto1==line.Punto2) {
+					System.out.println("hay:"+pts+"puntos");
+				}else {
+					conexion.Punto2=line.Punto2;
+					point2(lineas,++pos,conexion,"Derecha",++pts);
+						}
+			}else {
+				System.out.println("no hay punto");
+					}
+	}else {
+		if (pos<lineas.getLenght()) {
+			Linea line= (Linea) lineas.getElement(pos);
+			if(conexion.Punto2==line.Punto1) {
+				System.out.println("hay:"+pts+"puntos");
+			}else {
+				conexion.Punto1=line.Punto1;
+				point2(lineas,++pos,conexion,"Izquierda",++pts);
+					}
+		}else {
+			System.out.println("no hay punto");
+				}
+	}
+	}
+	}
