@@ -45,9 +45,11 @@ public class Mainpuntos {
 	System.out.println("holo");
 	MakeLine(Punto1,Punto2);
 	System.out.println("holo");
-	MakeLine(Punto5,Punto1);
-	System.out.println("holo");
 	MakeLine(Punto2,Punto6);
+	System.out.println("holo");
+	MakeLine(Punto6,Punto5);
+	System.out.println("holo");
+	MakeLine(Punto5,Punto1);
 	
 	
 	}
