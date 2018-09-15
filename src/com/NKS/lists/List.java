@@ -90,6 +90,7 @@ public class List<T> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public T getElement(int position) {
 		if(position < this.lenght) {
 			Node<T> temp = this.head;
@@ -131,8 +132,8 @@ public class List<T> {
 //		list1.printL();
 //	}
 //
-	public void add(List<T> element) {
-		
-	}
+//	public void add(List<T> element) {
+//		
+//	}
 	
 }
