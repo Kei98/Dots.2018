@@ -9,21 +9,21 @@ public class Linea {
 		this.Punto1 = punto1;
 		this.Punto2 = punto2;
 	}
-	public void Point(List lineas,int pos,Linea Turn, Linea conexion) {
+	public void Point(List lineas,int pos,Linea move, Linea conexion) {
 		if (pos<lineas.getLenght()){
 			Linea line = (Linea) lineas.getElement(pos);
-			if (Turn.Punto2==line.Punto1) {
-				conexion= new Linea(Turn.Punto1,line.Punto2);
-				point2(lineas,0,conexion,"Derecha",2);
+			if (move.Punto2==line.Punto1) {
+				conexion= new Linea(move.Punto1,line.Punto2);
+				point2(lineas,0,conexion,"Derecha",1);
 			
 				
 				
-			}if (Turn.Punto1==line.Punto2) {
-				conexion= new Linea(line.Punto1,Turn.Punto2);
-				point2(lineas,0,conexion,"Izquierda",2);
+			}else if(move.Punto1==line.Punto2) {
+				conexion= new Linea(line.Punto1,move.Punto2);
+				point2(lineas,0,conexion,"Izquierda",1);
 				
 			}else {
-				Point(lineas,++pos,Turn,conexion);
+				Point(lineas,++pos,move,conexion);
 			}
 		}else {
 			System.out.println("no hay punto");

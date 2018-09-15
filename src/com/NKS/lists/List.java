@@ -90,6 +90,7 @@ public class List<T> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public T getElement(int position) {
 		if(position < this.lenght) {
 			Node<T> temp = this.head;
