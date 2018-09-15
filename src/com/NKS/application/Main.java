@@ -25,7 +25,7 @@ public class Main extends Application{
 	public Pane game,intro;
 	public List<Integer> dotsx,dotsy;
 	public Integer num_click;
-	public List<Integer> temp_dot;
+	public List<Integer> temp_dot,temp_dot2;
 	
 	public void start(Stage primaryStage) {
 		window = primaryStage;
@@ -67,6 +67,7 @@ public class Main extends Application{
 		game.setOnMouseClicked(e -> Click(0,0));
 		intro.setStyle("-fx-background-color: cornsilk");
 		temp_dot = new List<Integer>();
+		temp_dot2 = new List<Integer>();
 //		Dots
 		ImageView dot = new ImageView(new Image("file:D:\\Fotos\\Fondo/punto.png"));
 		ImageView dot2 = new ImageView(new Image("file:D:\\Fotos\\Fondo/punto.png"));
