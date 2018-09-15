@@ -132,8 +132,8 @@ public class List<T> {
 //		list1.printL();
 //	}
 //
-	public void add(List<T> element) {
-		
-	}
+//	public void add(List<T> element) {
+//		
+//	}
 	
 }
