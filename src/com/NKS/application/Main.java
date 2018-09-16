@@ -1,6 +1,8 @@
 package com.NKS.application;
 	
 import java.awt.MouseInfo;
+
+import com.NKS.Puntos.Mainpuntos;
 import com.NKS.lists.List;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -143,15 +145,14 @@ public class Main extends Application{
 		}
 	}
 	public void Click(int j, int i) {
-			int x = MouseInfo.getPointerInfo().getLocation().x-428;
-			int y = MouseInfo.getPointerInfo().getLocation().y-89;
+			int x = generateX();
+			int y = generateY();
 			if (num_click == 1) {
 				while(j<dotsx.getLenght() && i<dotsy.getLenght()) {
-					if(x <= dotsx.getElement(j)+20 && x >= dotsx.getElement(j) ) {
-						if(y <= dotsy.getElement(i)+20 && y >= dotsy.getElement(i) ) {
+					if(x <= dotsx.getElement(j)/100+20 && x >= dotsx.getElement(j)/100 ) {
+						if(y <= dotsy.getElement(i)/100+20 && y >= dotsy.getElement(i)/100 ) {
 							temp_dot.add(x);
 							temp_dot.add(y);
-							System.out.println("hey hey hey i am the first click");
 							num_click = 2;
 							j = dotsx.getLenght();
 						}else {
@@ -162,16 +163,19 @@ public class Main extends Application{
 			}
 			if (num_click == 2) {
 				while(j<dotsx.getLenght() && i<dotsy.getLenght()) {
-					if(x <= dotsx.getElement(j)+20 && x >= dotsx.getElement(j) ) {
-						if(y <= dotsy.getElement(i)+20 && y >= dotsy.getElement(i) ) {
-							if(x - temp_dot.getElement(0) < 120 && y - temp_dot.getElement(1) < 120) {
-								System.out.println(temp_dot.getElement(1)); 
-								System.out.println(temp_dot.getElement(0));
-								System.out.println(y);
-								System.out.println(x);
+					if(x <= dotsx.getElement(j)/100+20 && x >= dotsx.getElement(j)/100 ) {
+						if(y <= dotsy.getElement(i)/100+20 && y >= dotsy.getElement(i)/100 ) {
+							if(x - temp_dot.getElement(0) < 2 && y - temp_dot.getElement(1) < 2) {
+								temp_dot2.add(x);
+								temp_dot2.add(y);
+								temp_dot.printL();
+								temp_dot2.printL();
+								Mainpuntos.MakeLine(temp_dot, temp_dot2);
 								num_click = 1;
 								temp_dot.delete(0);
 								temp_dot.delete(0);
+								temp_dot2.delete(0);
+								temp_dot2.delete(0);
 								j = dotsx.getLenght();
 							}else {
 								j = dotsx.getLenght();}
@@ -184,17 +188,16 @@ public class Main extends Application{
 			}
 	}
 			
-	public void createDots(){
-		for (int column=150; column<(900); column = column + 150) {
-			for (int row=50; row<(900); row = row + 150 ) {
-				//List tempDot = new List<>();
-				//tempDot.add(column);
-				//tempDot.add(row);
+	public int generateX(){
+		int x = MouseInfo.getPointerInfo().getLocation().x-428;
+		return x/100;
 			}
-		}
-		//dots.printL();
-	}
+	public int generateY(){
+		int y = MouseInfo.getPointerInfo().getLocation().y-89;
+		return y/100;
+			}
 }
+
 
 	
 	
