@@ -45,23 +45,6 @@ public class Mainpuntos {
 	Malla.add(Punto7);
 	Malla.add(Punto8);
 
-	MakeLine(Punto7,Punto8);
-	System.out.println("holo");
-	MakeLine(Punto1,Punto2);
-	System.out.println("holo");
-	MakeLine(Punto2,Punto6);
-	System.out.println("holo");
-	MakeLine(Punto6,Punto5);
-	System.out.println("holo");
-	MakeLine(Punto5,Punto1);
-	
-	
-	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static void MakeLine(List Punto1,List Punto2) {
-		Linea jugada=new Linea(Punto1,Punto2);
-		jugada.figure(Lineas,0,jugada, null);
-		Lineas.add(jugada);
 		
 	}
 
