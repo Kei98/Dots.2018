@@ -2,8 +2,10 @@ package com.NKS.Puntos;
 import com.NKS.lists.*;
 
 public class Mainpuntos {
+	@SuppressWarnings("rawtypes")
 	static List Lineas=new List<>();
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String[] args) {
 	List Punto1 = new List<>();
 	Punto1.add(1);
@@ -31,6 +33,8 @@ public class Mainpuntos {
 	Punto8.add(2);
 //	Me di cuenta que todo se lo añadía a "Punto1", lo cambié pero sigue parecido
 	
+	
+	
 	List Malla = new List<>();
 	Malla.add(Punto1);
 	Malla.add(Punto2);
@@ -54,9 +58,10 @@ public class Mainpuntos {
 	MakeLine(Punto2,Punto1);
 	
 	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void MakeLine(List Punto1,List Punto2) {
 		Linea jugada=new Linea(Punto1,Punto2);
-		jugada.Point(Lineas,0,jugada, null);
+		jugada.figure(Lineas,0,jugada, null);
 		Lineas.add(jugada);
 		
 	}
