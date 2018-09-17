@@ -19,6 +19,12 @@ public class Server {
 	BufferedReader entrada;
 	@SuppressWarnings("rawtypes")
 	static List Lineas;
+	String player1sname;
+	String player2sname;
+	int player1pts;
+	int player2pts;
+	
+	
 	
 	
 	

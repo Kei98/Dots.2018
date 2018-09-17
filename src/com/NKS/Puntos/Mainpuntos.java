@@ -4,6 +4,7 @@ import com.NKS.lists.*;
 public class Mainpuntos {
 	@SuppressWarnings("rawtypes")
 	static List Lineas=new List<>();
+	static boolean figure;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String[] args) {
@@ -45,7 +46,37 @@ public class Mainpuntos {
 	Malla.add(Punto7);
 	Malla.add(Punto8);
 
-		
+	MakeLine(Punto3,Punto4);
+	MakeLine(Punto2,Punto3);
+	MakeLine(Punto1,Punto2);
+	Block(Punto3,Punto2,0);
+	System.out.println(figure);
+	
 	}
-
+	@SuppressWarnings({ "rawtypes" })
+	public static void Block(List Punto1, List Punto2, int pos) {
+	if (pos >=Lineas.getLenght()) {
+		figure= true;
+	}else if (pos<Lineas.getLenght()){
+		Linea test= new Linea(Punto1,Punto2);
+		Linea test2=(Linea) Lineas.getElement(pos);
+		if ((test.Punto1==test2.Punto1 && test.Punto2==test2.Punto2)||(test.Punto1==test2.Punto2 && test.Punto2==test2.Punto1)) {
+			System.out.println("holo3");
+			figure=false;
+		
+		}else {
+			Block(Punto1,Punto2,++pos);
+		}
+	}
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void MakeLine(List Punto1,List Punto2) {
+		Linea jugada=new Linea(Punto1,Punto2);
+		jugada.figure(Lineas,0,jugada, null);
+		Lineas.add(jugada);
+	}
+	
 }
+
+

@@ -1,8 +1,5 @@
 package com.NKS.json;
 
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 import org.json.simple.JSONObject;
 
