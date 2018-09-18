@@ -1,7 +1,13 @@
 package com.NKS.sockets1;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import com.NKS.Puntos.Linea;
+import com.NKS.lists.List;
 
 public class Server {
 
@@ -11,6 +17,13 @@ public class Server {
 	int puerto=9000;
 	DataOutputStream salida;
 	BufferedReader entrada;
+	@SuppressWarnings("rawtypes")
+	static List Lineas;
+	String player1sname;
+	String player2sname;
+	int player1pts;
+	int player2pts;
+	
 	
 	
 	
@@ -30,5 +43,13 @@ public class Server {
 			salida.writeUTF("Holant mundo");
 			socket.close();
 		}catch(Exception e) {};
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void MakeLine(List Punto1,List Punto2) {
+		Punto1.printL();
+		Linea jugada=new Linea(Punto1,Punto2);
+		jugada.figure(Lineas,0,jugada, null);
+		Lineas.add(jugada);
 	}
 }
