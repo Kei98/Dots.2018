@@ -19,11 +19,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 public class Main extends Application{
 	public Scene scene,scene2;
-	public Stage window;
+	public Stage window,wind_game;
 	public Button btn1,btn2;
 	public TextField name;
 	public Label name_game;
@@ -32,12 +33,14 @@ public class Main extends Application{
 	public List<Integer> dotsx,dotsy;
 	public Integer num_click;
 	public List<Integer> temp_dot,temp_dot2;
-	Circle circ,temp_circ;
+	public Circle circ,temp_circ;
+	public Line line;
 	static List Lineas;
 	static int figure;
 	
 	public void start(Stage primaryStage) {
 		window = primaryStage;
+		wind_game = new Stage();
 //  	Images
 		ImageView iv = new ImageView(new Image("file:D:\\Fotos\\Fondo/Dots.png"));
 		ImageView iv2 = new ImageView(new Image("file:D:\\Fotos\\Fondo/dots.jpg"));
@@ -69,8 +72,8 @@ public class Main extends Application{
 		
 		btn2 = new Button("Menu");
 		btn2.setOnAction(e -> {
-			window.setScene(scene);
-			window.setTitle("Menu");
+			wind_game.close();
+			window.show();
 		});
 //		Others
 		num_click = 1;
@@ -122,6 +125,8 @@ public class Main extends Application{
 		window.setScene(scene);
 		window.setTitle("Menu");
 		window.show();
+		wind_game.initStyle(StageStyle.UNDECORATED);
+		wind_game.setScene(scene2);
 		}
 	
 	
@@ -134,15 +139,16 @@ public class Main extends Application{
 		AlertBox.show("Error", "You must introduce a name");
 		}else {
 		name_game.setText("Player: "+ name.getText());
-		window.setScene(scene2);
+		window.close();
+		wind_game.show();
 		window.setTitle("Game");
 		}
 	}
 	public void Click(int j, int i) {
 			int x = generateX();
 			int y = generateY();
-			int x2 = MouseInfo.getPointerInfo().getLocation().x-428;
-			int y2 = MouseInfo.getPointerInfo().getLocation().y-89;
+			int x2 = MouseInfo.getPointerInfo().getLocation().x-333;
+			int y2 = MouseInfo.getPointerInfo().getLocation().y-43;
 			if (num_click == 1) {
 				while(j<dotsx.getLenght() && i<dotsy.getLenght()) {
 					if(x2 <= dotsx.getElement(j)+20 && x2 >= dotsx.getElement(j) ) {
@@ -174,7 +180,7 @@ public class Main extends Application{
 									Block(temp_dot,temp_dot2,0);
 									if(figure == 0) {
 										temp_circ.setFill(Color.BLACK);
-										Line line = new Line(temp_dot.getElement(0)*100+10,temp_dot.getElement(1)*100+10,temp_dot2.getElement(0)*100+10,temp_dot2.getElement(1)*100+10);
+										line = new Line(temp_dot.getElement(0)*100+10,temp_dot.getElement(1)*100+10,temp_dot2.getElement(0)*100+10,temp_dot2.getElement(1)*100+10);
 										line.setStrokeWidth(7);
 										line.setFill(Color.AQUA);
 										game.getChildren().addAll(line);
@@ -213,11 +219,11 @@ public class Main extends Application{
 	}
 			
 	public int generateX(){
-		int x = MouseInfo.getPointerInfo().getLocation().x-428;
+		int x = MouseInfo.getPointerInfo().getLocation().x-337;
 		return x/100;
 			}
 	public int generateY(){
-		int y = MouseInfo.getPointerInfo().getLocation().y-89;
+		int y = MouseInfo.getPointerInfo().getLocation().y-43;
 		return y/100;
 			}
 	public void createcircles() {
