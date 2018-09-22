@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.NKS.lists.Queue;
+import com.NKS.Puntos.Linea;
+import com.NKS.lists.List;
 
 
 public class Server {
@@ -15,6 +17,7 @@ public class Server {
 	private Socket socketP2 = null;
 	private Queue<Socket> sockets = new Queue<Socket>();
 	private String name = null;
+	private static List<Linea> lineas = new List<Linea>();
 
 	@SuppressWarnings("resource")
 	public void start() {
@@ -78,5 +81,13 @@ public class Server {
 			clientSocket.close();
 			socketP2 = null;
 		}
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	public static void MakeLine(List Punto1,List Punto2) {
+		Punto1.printL();
+		Linea jugada=new Linea(Punto1,Punto2);
+		jugada.figure(lineas,0,jugada, null);
+		lineas.add(jugada);
 	}
 }

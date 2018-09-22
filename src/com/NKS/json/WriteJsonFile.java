@@ -1,15 +1,15 @@
 package com.NKS.json;
-//import org.json.simple.JSONObject;
 
 
 import org.json.JSONObject;
 
 
+
 import com.NKS.lists.List;
 
+//import com.NKS.Puntos.Linea;
+
 public class WriteJsonFile {
-//	private String playersName;
-//	private String message;
 	private JSONObject jsonObject;
 	/**
 	 * Curiosidad: el json se ordena según el nombre de los parámetros
@@ -33,3 +33,4 @@ public class WriteJsonFile {
 	}
 	
 }
+
