@@ -15,11 +15,11 @@ public class Mainpuntos {
 	Punto2.add(2);
 	Punto2.add(1);
 	List Punto3 = new List<>();
-	Punto3.add(3);
-	Punto3.add(1);
+	Punto3.add(2);
+	Punto3.add(2);
 	List Punto4 = new List<>();
-	Punto4.add(4);
 	Punto4.add(1);
+	Punto4.add(2);
 	List Punto5 = new List<>();
 	Punto5.add(1);
 	Punto5.add(2);
@@ -32,7 +32,6 @@ public class Mainpuntos {
 	List Punto8 = new List<>();
 	Punto8.add(4);
 	Punto8.add(2);
-//	Me di cuenta que todo se lo añadía a "Punto1", lo cambié pero sigue parecido
 	
 	
 	
@@ -46,6 +45,17 @@ public class Mainpuntos {
 	Malla.add(Punto7);
 	Malla.add(Punto8);
 
+
+	System.out.println(Punto1.getElement(0));
+	System.out.println(Punto1.getElement(1));
+	System.out.println(Punto2.getElement(0));
+	System.out.println(Punto2.getElement(1));
+	MakeLine(Punto1,Punto2);
+	System.out.println(Punto2.getElement(0));
+	System.out.println(Punto2.getElement(1));
+	System.out.println(Punto1.getElement(0));
+	System.out.println(Punto1.getElement(1));
+	MakeLine(Punto2,Punto1);
 	MakeLine(Punto3,Punto4);
 	MakeLine(Punto2,Punto3);
 	MakeLine(Punto1,Punto2);

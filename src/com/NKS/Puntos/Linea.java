@@ -4,8 +4,10 @@ import com.NKS.lists.*;
 public class Linea {
 	
 	@SuppressWarnings("rawtypes")
+	public
 	List Punto1;
 	@SuppressWarnings("rawtypes")
+	public
 	List Punto2;
 	@SuppressWarnings("rawtypes")
 	public Linea(List punto1, List punto2) {
@@ -46,7 +48,7 @@ public class Linea {
 				figure(lineas,++pos,Turn,conexion);
 			}
 		}else {
-			System.out.println("no hay figura");
+			System.out.println("no hay figura1");
 		}
 	}
 	@SuppressWarnings("rawtypes")
@@ -73,8 +75,13 @@ public class Linea {
 					figure2(lineas,++pos,conexion,"Izquierda",++pts);
 				}
 			}else {
-				System.out.println("no hay figura");
+				System.out.println("no hay figura2");
 			}
 		}
 	}
+	public void printLine() {
+		Punto1.printL();
+		Punto2.printL();
+	}
+			
 }
