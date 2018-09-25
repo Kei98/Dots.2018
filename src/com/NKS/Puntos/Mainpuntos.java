@@ -51,6 +51,11 @@ public class Mainpuntos {
 	MakeLine(Punto1,Punto2);
 	Block(Punto3,Punto2,0);
 	System.out.println(figure);
+	Block(Punto5,Punto6,0);
+	System.out.println(figure);
+	Block(Punto1,Punto5,0);
+	System.out.println(figure);
+	
 	
 	}
 	@SuppressWarnings({ "rawtypes" })
@@ -68,8 +73,7 @@ public class Mainpuntos {
 			Block(Punto1,Punto2,++pos);
 		}
 	}
-	}
-	
+	} 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void MakeLine(List Punto1,List Punto2) {
 		Linea jugada=new Linea(Punto1,Punto2);
