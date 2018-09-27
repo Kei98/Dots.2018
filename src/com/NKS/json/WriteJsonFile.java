@@ -1,9 +1,7 @@
 package com.NKS.json;
 
 
-import org.json.JSONObject;
-
-
+import org.json.simple.JSONObject;
 
 import com.NKS.lists.List;
 
@@ -18,6 +16,7 @@ public class WriteJsonFile {
 	 * @param pts
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public WriteJsonFile(String name, List<Integer> nlist, int pts) {
 		this.jsonObject = new JSONObject();
 		jsonObject.put("name", name);
