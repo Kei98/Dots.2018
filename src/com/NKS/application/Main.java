@@ -13,11 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -27,30 +29,34 @@ public class Main extends Application{
 	public Stage window,wind_game;
 	public Button btn1,btn2;
 	public TextField name;
-	public Label name_game;
+	public Label name_game,onTurn_label;
 	public Label dot;
 	public Pane game,intro;
 	public List<Integer> dotsx,dotsy;
 	public Integer num_click;
 	public List<Integer> temp_dot,temp_dot2;
-	public Circle circ,temp_circ;
+	public Circle circ,temp_circ,onTurn;
 	public Line line;
 	static List Lineas;
+	public List elements;
 	static int figure;
+	public int Turn;
 	
 	public void start(Stage primaryStage) {
 		window = primaryStage;
 		wind_game = new Stage();
 //  	Images
-		ImageView iv = new ImageView(new Image("file:D:\\Fotos\\Fondo/Dots.png"));
-		ImageView iv2 = new ImageView(new Image("file:D:\\Fotos\\Fondo/dots.jpg"));
-		ImageView play_btn = new ImageView(new Image("file:D:\\Fotos\\Fondo/play.png"));
-		ImageView logo = new ImageView(new Image("file:D:\\Fotos\\Fondo/Logo.png"));
+		ImageView iv = new ImageView(new Image("/Multimedia/Dots.png"));
+		ImageView iv2 = new ImageView(new Image("/Multimedia/dots.jpg"));
+		ImageView play_btn = new ImageView(new Image("/Multimedia/play.png"));
+		ImageView logo = new ImageView(new Image("/Multimedia/Logo.png"));
 		iv2.setPreserveRatio(true);
 //		Panes
 		intro = new Pane();
 		game = new Pane();
 //		Labels and TextFields
+		onTurn_label = new Label("Turn:");
+		onTurn_label.setStyle("-fx-font-size: 20");
 		name = new TextField();
 		Label player_name = new Label("Player Name");
 		name_game = new Label("Player: ");
@@ -64,6 +70,7 @@ public class Main extends Application{
 // 		Button Config	
 		btn1 = new Button("Play",play_btn);
 		btn1.setOnAction(e -> {
+			onTurn();
 			createcircles();
 			verify();	
 		});
@@ -72,12 +79,19 @@ public class Main extends Application{
 		
 		btn2 = new Button("Menu");
 		btn2.setOnAction(e -> {
-			wind_game.close();
+
+			wind_game.hide();
 			window.show();
 		});
 //		Others
 		num_click = 1;
-		game.setOnMouseClicked(e -> Click(0,0));
+		Turn = 0;
+		onTurn = new Circle();
+		onTurn.setRadius(8);
+		game.setOnMouseClicked(e -> { 
+			if(Turn == 0) {
+			Click(0,0);
+		}});
 		intro.setStyle("-fx-background-color: cornsilk");
 		temp_dot = new List<Integer>();
 		temp_dot2 = new List<Integer>();
@@ -116,8 +130,12 @@ public class Main extends Application{
 		player.setLayoutY(300);
 		name_game.setLayoutX(10);
 		name_game.setLayoutY(10);
+		onTurn_label.setLayoutX(500);
+		onTurn_label.setLayoutY(30);
+		onTurn.setLayoutX(570);
+		onTurn.setLayoutY(45);
 //		Place
-		game.getChildren().addAll(btn2,name_game);
+		game.getChildren().addAll(btn2,name_game,onTurn_label,onTurn);
 		intro.getChildren().addAll(iv2,logo,btn1,player);
 //		Window config
 		window.setResizable(false);
@@ -147,7 +165,7 @@ public class Main extends Application{
 	public void Click(int j, int i) {
 			int x = generateX();
 			int y = generateY();
-			int x2 = MouseInfo.getPointerInfo().getLocation().x-333;
+			int x2 = MouseInfo.getPointerInfo().getLocation().x-337;
 			int y2 = MouseInfo.getPointerInfo().getLocation().y-43;
 			if (num_click == 1) {
 				while(j<dotsx.getLenght() && i<dotsy.getLenght()) {
@@ -185,20 +203,20 @@ public class Main extends Application{
 										line.setFill(Color.AQUA);
 										game.getChildren().addAll(line);
 										num_click = 1;
-										List a = new List<>();
+										List<Integer> a = new List<Integer>();
 										a.add(temp_dot.getElement(0));
 										a.add(temp_dot.getElement(1));
-										List b = new List<>();
+										List<Integer> b = new List<Integer>();
 										b.add(temp_dot2.getElement(0));
 										b.add(temp_dot2.getElement(1));
 										Linea temp_line = new Linea(a,b);
-										System.out.println("print de la linea hecha");
-										temp_line.printLine();
 										Lineas.add(temp_line);
 										temp_dot.delete(0);
 										temp_dot.delete(0);
 										temp_dot2.delete(0);
 										temp_dot2.delete(0);
+										Turn = 1;
+										onTurn();
 										j = dotsx.getLenght();	
 									}else {
 										temp_dot2.delete(0);
@@ -248,17 +266,11 @@ public class Main extends Application{
 	public static void Block(List Punto1, List Punto2, int pos) {
 		if (pos >=Lineas.getLenght()) {
 			figure= 0;
-			System.out.println("print de el valor de figure"+figure);
 		}else if (pos<Lineas.getLenght()){
 			Linea test= new Linea(Punto1,Punto2);
 			Linea test2=(Linea) Lineas.getElement(pos);
-			System.out.println("print de test");
-			test.printLine();
-			System.out.println("print de test2");
-			test2.printLine();
 			if ((test.Punto1.getElement(0)==test2.Punto1.getElement(0)) && (test.Punto1.getElement(1)==test2.Punto1.getElement(1)) && (test.Punto2.getElement(0)==test2.Punto2.getElement(0)) && (test.Punto2.getElement(1)==test2.Punto2.getElement(1)) || (test.Punto1.getElement(0)==test2.Punto2.getElement(0)) && (test.Punto1.getElement(1)==test2.Punto2.getElement(1)) && (test.Punto2.getElement(0)==test2.Punto1.getElement(0)) && (test.Punto2.getElement(1)==test2.Punto1.getElement(1))) {
 				figure=1;
-				System.out.println("print de el valor de figure"+figure);
 			
 			}else {
 				pos = pos + 1;
@@ -266,9 +278,16 @@ public class Main extends Application{
 			}
 		}
 	}
-	
-	
-}
+	public void onTurn() {
+		if (Turn == 0){
+			onTurn.setFill(Color.GREEN);
+		}else if(Turn == 1) {
+			onTurn.setFill(Color.RED);
+		}
+	}
+
+	}
+
 
 
 	
