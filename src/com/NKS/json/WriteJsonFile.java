@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 
 
-import com.NKS.lists.List;
+import com.NKS.lists.Matrix;
 
 //import com.NKS.Puntos.Linea;
 
@@ -18,10 +18,10 @@ public class WriteJsonFile {
 	 * @param pts
 	 */
 	
-	public WriteJsonFile(String name, List<Integer> nlist, int pts) {
+	public WriteJsonFile(String name, Matrix nmatrix, int pts) {
 		this.jsonObject = new JSONObject();
 		jsonObject.put("name", name);
-		jsonObject.put("list", nlist);
+		jsonObject.put("list", nmatrix.printM());
 		jsonObject.put("points", pts);
 	}
 	

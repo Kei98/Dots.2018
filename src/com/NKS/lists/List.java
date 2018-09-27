@@ -9,6 +9,8 @@ package com.NKS.lists;
 public class List<T> {
 	private Node<T> head;
 	private int lenght;
+	@SuppressWarnings("rawtypes")
+	private List next;
 
 	public List() {
 		this.head = null;
@@ -18,6 +20,12 @@ public class List<T> {
 	public List(Node<T> head) {
 		this.head = head;
 		this.lenght = 0;
+	}
+	
+	public List(T elem1, T elem2) {
+		this.lenght = 0;
+		this.add(elem1);
+		this.add(elem2);
 	}
 	
 	
@@ -36,6 +44,7 @@ public class List<T> {
 		}
 		this.lenght++;
 	}
+	
 	
 	public void add(T element, int position) {
 		if(position <= this.lenght) {
@@ -80,6 +89,11 @@ public class List<T> {
 			this.lenght--;
 		} else {
 			System.out.println("Out of index");
+		}
+	}
+	public void deleteAll() {
+		while(this.lenght != 0) {
+			this.delete(0);
 		}
 	}
 	
@@ -127,7 +141,33 @@ public class List<T> {
 		System.out.println(" ");
 	}
 	
+	public String list() {
+		if(this.head != null) {
+			Node<T> temp = this.head;
+			String list = "[";
+			while(temp.getNext() != null) {
+				list+= temp.getElement() + ",";
+				temp = temp.getNext();
+			}
+			list += temp.getElement() + "]";
+			return list;
+		}else {
+			return "No hay lista";
+		}
+		
+	}
+	
 	public int getLenght() {
 		return lenght;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public List getNext() {
+		return next;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void setNext(List next) {
+		this.next = next;
 	}
 }
