@@ -1,13 +1,18 @@
 package com.NKS.sockets1;
 
+//import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+//import java.io.InputStreamReader;
+//import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+//import java.nio.charset.StandardCharsets;
 
 import com.NKS.lists.Queue;
 import com.NKS.Puntos.Linea;
+import com.NKS.json.ReadJsonFile;
 import com.NKS.lists.List;
 
 
@@ -42,8 +47,9 @@ public class Server {
 				Thread t2 = new Thread() {
 					public void run() {
 						try {
-							if(sockets != null && socketP1 != null) {
+							if(sockets != null) {
 								socketP2 = sockets.dequeue();
+								System.out.println("Entra 2");
 								handleClientSocket(socketP2);
 							}
 						} catch (IOException | InterruptedException e) {
@@ -62,14 +68,39 @@ public class Server {
 	}
 
 	private void handleClientSocket(Socket clientSocket) throws IOException, InterruptedException {
+
 		DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 		DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
-		name = dis.readUTF();
-		System.out.println(name);
-		for(int i = 0; i < 10; i++) {
-			dos.writeUTF("holi, " + name + ", " + i);
-			Thread.sleep(1000);
-		}
+		Thread t = new Thread() {
+			public void run() {
+				ReadJsonFile json;
+				try {
+					json = new ReadJsonFile(dis.readUTF());
+					name = json.getName();
+					System.out.println(name);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+		};
+//		t.start();
+		Thread t2 = new Thread() {
+			public void run() {
+				for(int i = 0; i < 10; i++) {
+					try {
+						dos.writeUTF("holi, " + name + ", " + i);
+//						Thread.sleep(1000);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		t.start();
+		t2.start();
+		
 		if(dis.readUTF().equals("Recibido")) {
 			dos.writeUTF("OK");
 		}
@@ -79,9 +110,11 @@ public class Server {
 		}
 		else if(dis.readUTF().equals("Adiós") && socketP1 == null) {
 			clientSocket.close();
+//			socketP1 = null;
 			socketP2 = null;
 		}
 	}
+
 	
 	@SuppressWarnings({ "rawtypes" })
 	public static void MakeLine(List Punto1,List Punto2) {

@@ -1,9 +1,9 @@
 package com.NKS.json;
 
 
-
-
 import org.json.JSONObject;
+
+
 
 import com.NKS.lists.Matrix;
 
@@ -14,16 +14,20 @@ public class WriteJsonFile {
 	/**
 	 * Curiosidad: el json se ordena según el nombre de los parámetros
 	 * @param name
-	 * @param nlist
+	 * @param nmatrix
 	 * @param pts
 	 */
 	
 	public WriteJsonFile(String name, Matrix nmatrix, int pts) {
-//	public WriteJsonFile(String name, List<Integer> nlist, int pts) {
-//		this.jsonObject = new JSONObject();
-//		jsonObject.put("name", name);
-//		jsonObject.put("list", nmatrix.printM());
-//		jsonObject.put("points", pts);
+		this.jsonObject = new JSONObject();
+		jsonObject.put("name", name);
+		jsonObject.put("points", pts);
+		if(nmatrix != null) {
+			jsonObject.put("list", nmatrix.printM());
+		}else {
+			jsonObject.put("list", " ");
+		}
+
 	}
 	
 	public JSONObject getJsonObject() {
@@ -32,6 +36,11 @@ public class WriteJsonFile {
 	public String getJson() {
 		return jsonObject.toString();
 	}
-	
+//	public static void main(String[] args) {
+//		WriteJsonFile w = new WriteJsonFile("Holi", null, 0);
+//		System.out.println(w.getJsonObject());
+//		System.out.println(w.getJson());
+//	}
+//	
 }
 
