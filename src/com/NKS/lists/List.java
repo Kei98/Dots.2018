@@ -38,18 +38,29 @@ public class List<T> {
 	}
 	
 	public void add(T element, int position) {
-		if(position < this.lenght) {
+		if(position <= this.lenght) {
 			Node<T> node = new Node<>(element);
 			Node<T> temp = this.head;
 			for(int i = 0; i < position; i++) {
 				temp = temp.getNext();
 			}
-			temp.getNext().setPrev(node);
-			node.setNext(temp.getNext());
-			node.setPrev(temp);
-			temp.setNext(node);
+			if(this.head == null && position == 0) {
+//				Node<T> node = new Node<>(element);
+				this.head = node;
+				this.head.setPrev(null);
+				this.head.setNext(null);
+			}else if(this.head != null && position == 0) {
+				this.head.setPrev(node);
+				node.setNext(this.head);
+				this.head = node;
+			}else {
+				temp.getNext().setPrev(node);
+				node.setNext(temp.getNext());
+				node.setPrev(temp);
+				temp.setNext(node);
+			}
 			this.lenght++;
-		} else {
+		}else {
 			System.out.println("Out of index");
 		}
 	}
@@ -82,7 +93,9 @@ public class List<T> {
 				this.head = temp.getNext();
 			} else {
 				temp.getPrev().setNext(temp.getNext());
-				temp.getNext().setPrev(temp.getPrev());
+				if(temp.getNext() != null) {
+					temp.getNext().setPrev(temp.getPrev());
+				}
 			}
 			this.lenght--;
 		}else {
@@ -117,23 +130,4 @@ public class List<T> {
 	public int getLenght() {
 		return lenght;
 	}
-	
-//	public static void main(String[] args) {
-//		List list = new List<>();
-//		List list1 = new List<>();
-//		list.add("h");
-//		list.add("o");
-//		list.add("l");
-//		list.add("a");
-//		list1.add(list);
-//		list1.add("¿cómo");
-//		list1.add("está?");
-//		list.printL();
-//		list1.printL();
-//	}
-//
-//	public void add(List<T> element) {
-//		
-//	}
-	
 }

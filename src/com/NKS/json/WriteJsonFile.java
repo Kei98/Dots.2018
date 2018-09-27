@@ -1,28 +1,36 @@
 package com.NKS.json;
 
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
-import com.NKS.Puntos.Linea;
+
+
+import com.NKS.lists.List;
+
+//import com.NKS.Puntos.Linea;
 
 public class WriteJsonFile {
-	private JSONObject obj;
-
-	@SuppressWarnings("unchecked")
-	public WriteJsonFile(String name,Linea jugada, int pts) {
-		this.obj=new JSONObject();
-		obj.put("name: ", name);
-		obj.put("play: ", jugada);
-		obj.put("points: ", pts);
-		}
-		
-//	private void send() {
-//		Socket s = new Socket("192.168.0.100", 7777);
-//		try (OutputStreamWriter out = new OutputStreamWriter(
-//		        s.getOutputStream(), StandardCharsets.UTF_8)) {
-//		    out.write(obj.toString());
-//		
-//	}
-//	}
+	private JSONObject jsonObject;
+	/**
+	 * Curiosidad: el json se ordena según el nombre de los parámetros
+	 * @param name
+	 * @param nlist
+	 * @param pts
+	 */
+	
+	public WriteJsonFile(String name, List<Integer> nlist, int pts) {
+		this.jsonObject = new JSONObject();
+		jsonObject.put("name", name);
+		jsonObject.put("list", nlist);
+		jsonObject.put("points", pts);
+	}
+	
+	public JSONObject getJsonObject() {
+		return jsonObject;
+	}
+	public String getJson() {
+		return jsonObject.toString();
+	}
+	
 }
 

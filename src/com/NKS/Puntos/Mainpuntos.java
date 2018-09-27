@@ -32,7 +32,6 @@ public class Mainpuntos {
 	List Punto8 = new List<>();
 	Punto8.add(4);
 	Punto8.add(2);
-//	Me di cuenta que todo se lo añadía a "Punto1", lo cambié pero sigue parecido
 	
 	
 	
