@@ -1,8 +1,14 @@
 package com.NKS.sockets1;
 
-import java.io.*;
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import com.NKS.application.Main;
+
 
 //import org.json.JSONObject;
 
@@ -16,6 +22,8 @@ private static Scanner scanner = new Scanner(System.in);
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
 		Socket clientSocket = new Socket("localhost", 9000);
+		Main inter = new Main();
+		inter.main(null);
 		DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
 		DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
 		
@@ -32,6 +40,7 @@ private static Scanner scanner = new Scanner(System.in);
 			dos.writeUTF("Adiós");
 			stopConn(clientSocket);
 		}
+		
 	}
 	
 	private static void stopConn(Socket s) {

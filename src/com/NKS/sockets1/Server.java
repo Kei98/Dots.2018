@@ -123,4 +123,8 @@ public class Server {
 		jugada.figure(lineas,0,jugada, null);
 		lineas.add(jugada);
 	}
+	public static void main(String[] args) {
+		Server server = new Server();
+		server.start();
+	}
 }
