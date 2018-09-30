@@ -42,7 +42,7 @@ public class Main extends Application{
 		return name.getText();
 	}
 
-	public Label name_game,onTurn_label;
+	public Label name_game,onTurn_label,point,opPoint;
 	public Label dot;
 	public Pane game,intro;
 	public List<Integer> dotsx,dotsy;
@@ -94,11 +94,15 @@ public class Main extends Application{
 		game = new Pane();
 		
 //		Labels and TextFields
+		point = new Label("Your Points: 0");
+		opPoint = new Label("Opponent Points: 0");
 		onTurn_label = new Label("Turn:");
 		onTurn_label.setStyle("-fx-font-size: 20");
 		name = new TextField();
 		Label player_name = new Label("Player Name");
 		name_game = new Label("Player: ");
+		point.setStyle("-fx-font-size: 20");
+		opPoint.setStyle("-fx-font-size: 20");
 		name_game.setStyle("-fx-font-size: 20");
 		VBox player = new VBox();
 		player.getChildren().addAll(player_name,name);
@@ -191,12 +195,16 @@ public class Main extends Application{
 		player.setLayoutY(300);
 		name_game.setLayoutX(10);
 		name_game.setLayoutY(10);
+		point.setLayoutX(280);
+		point.setLayoutY(10);
+		opPoint.setLayoutX(280);
+		opPoint.setLayoutY(560);
 		onTurn_label.setLayoutX(500);
 		onTurn_label.setLayoutY(30);
 		onTurn.setLayoutX(570);
 		onTurn.setLayoutY(45);
 //		Place
-		game.getChildren().addAll(btn2,name_game,onTurn_label,onTurn);
+		game.getChildren().addAll(btn2,name_game,onTurn_label,onTurn,point,opPoint);
 		intro.getChildren().addAll(iv2,logo,btn1,player);
 //		Window config
 		window.setResizable(false);
@@ -275,6 +283,7 @@ public class Main extends Application{
 										temp_dot.delete(0);
 										temp_dot2.delete(0);
 										temp_dot2.delete(0);
+										Turn=1;
 										onTurn();
 										j = dotsx.getLenght();	
 									}else {
@@ -395,7 +404,6 @@ public class Main extends Application{
 			temp_dot.delete(0);
 			temp_dot.delete(0);
 			temp_circ.setFill(Color.BLACK);
-		}else {
 			
 		}
 		
