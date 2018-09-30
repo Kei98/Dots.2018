@@ -26,6 +26,7 @@ public class Server {
 	private int p1Pts;
 	private int p2Pts;
 	private Queue<Socket> sockets = new Queue<Socket>();
+	@SuppressWarnings("unused")
 	private String name = null;
 	private static List<Linea> lineas = new List<Linea>();
 
@@ -171,5 +172,9 @@ public class Server {
 		Linea jugada=new Linea(Punto1,Punto2);
 		jugada.figure(lineas,0,jugada, null);
 		lineas.add(jugada);
+	}
+	public static void main(String[] args) {
+		Server server = new Server();
+		server.start();
 	}
 }

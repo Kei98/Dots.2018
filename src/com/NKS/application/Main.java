@@ -20,13 +20,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-//import javafx.scene.layout.HBox;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-//import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -71,7 +71,9 @@ public class Main extends Application{
 	private ReadJsonFile in;
 	
 //	
+	@SuppressWarnings("unused")
 	private Linea adversaryMove;
+	@SuppressWarnings("unused")
 	private int adversaryPts;
 	private int count;
 	
@@ -122,9 +124,13 @@ public class Main extends Application{
 		
 		btn2 = new Button("Menu");
 		btn2.setOnAction(e -> {
-
 			wind_game.hide();
-			window.show();
+			try {
+				start(primaryStage);
+				window.show();
+			} catch (IOException | InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		});
 //		Others
 		num_click = 1;
@@ -136,10 +142,17 @@ public class Main extends Application{
 			try {
 				Click(0,0);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				
+			try {
+				clickButton(e);
+			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}});
+		
+		
 		intro.setStyle("-fx-background-color: cornsilk");
 		temp_dot = new List<Integer>();
 		temp_dot2 = new List<Integer>();
@@ -248,7 +261,6 @@ public class Main extends Application{
 										temp_circ.setFill(Color.BLACK);
 										line = new Line(temp_dot.getElement(0)*100+10,temp_dot.getElement(1)*100+10,temp_dot2.getElement(0)*100+10,temp_dot2.getElement(1)*100+10);
 										line.setStrokeWidth(7);
-										line.setFill(Color.AQUA);
 										game.getChildren().addAll(line);
 										num_click = 1;
 										List<Integer> a = new List<Integer>();
@@ -263,7 +275,6 @@ public class Main extends Application{
 										temp_dot.delete(0);
 										temp_dot2.delete(0);
 										temp_dot2.delete(0);
-										Turn = 1;
 										onTurn();
 										j = dotsx.getLenght();	
 									}else {
@@ -369,9 +380,35 @@ public class Main extends Application{
 		adversaryPts = in.getOpPts();
 	}
 	
-}
 	
 
+	public void drawOpponentLine(List<Integer> Punto1, List<Integer> Punto2) {
+		line = new Line(Punto1.getElement(0)*100+10,Punto1.getElement(1)*100+10,Punto2.getElement(0)*100+10,Punto2.getElement(1)*100+10);
+		line.setStrokeWidth(7);
+		game.getChildren().addAll(line);
+		Linea opponentLine = new Linea(Punto1,Punto2);
+		Lineas.add(opponentLine);
+	}
+	public void clean() {
+		if (num_click == 2) {
+			num_click = 1;
+			temp_dot.delete(0);
+			temp_dot.delete(0);
+			temp_circ.setFill(Color.BLACK);
+		}else {
+			
+		}
+		
+	}
+	public void clickButton(MouseEvent event) throws IOException {
+		if (event.getButton() == MouseButton.SECONDARY) {
+			clean();
+		}if (event.getButton() == MouseButton.PRIMARY) {
+			Click(0,0);
+		}
+		
+	}
+}
 
 
 
