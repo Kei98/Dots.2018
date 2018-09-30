@@ -4,24 +4,36 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
+import com.NKS.Puntos.Linea;
 import com.NKS.lists.List;
-import com.NKS.lists.Matrix;
 
 
 public class ReadJsonFile {
 	private String name;
-	private Matrix nmatrix;
+	private Linea nmatrix;
+	private int opPts;
+	
 	private int pts;
+	private String message;
 //	private String str2 = null;
+	
+
 	
 
 	public ReadJsonFile(String str) throws IOException {
 		JSONObject obj = new JSONObject(str);
 		this.name = obj.getString("name");
 		String smatrix = obj.getString("list");
-		System.out.println(smatrix);
+		this.message = obj.getString("message");
+//		System.out.println(smatrix);
+		this.opPts = obj.getInt("adversaryPts");
 		this.pts = obj.getInt("points");
-		this.nmatrix = toMatrix(smatrix);
+		if(smatrix.equals(" ")) {
+			this.nmatrix = null;
+		}else {
+			this.nmatrix = toMatrix(smatrix);
+		}
+
 //		str2 = this.name + " "+ this.nmatrix.printM() + " " + this.pts;
 	}
 
@@ -34,12 +46,20 @@ public class ReadJsonFile {
 //	}
 
 
-	public Matrix getNmatrix() {
+	public Linea getLine() {
 		return nmatrix;
 	}
 
 	public int getPts() {
 		return pts;
+	}
+	
+	public int getOpPts() {
+		return opPts;
+	}
+	
+	public String getMessage() {
+		return message;
 	}
 	
 //	public static void main(String[] args) throws IOException {
@@ -53,7 +73,7 @@ public class ReadJsonFile {
 ////		rj.getStr2();
 //		
 //	}
-	private static Matrix toMatrix(String m) {
+	private static Linea toMatrix(String m) {
 		List<Character> l = new List<Character>();
 		List<Character> l2 = new List<Character>();
 		int count = 0;
@@ -61,7 +81,7 @@ public class ReadJsonFile {
 			if(notNumber(m.charAt(i))) {
 				count++;
 				if((count % 2) == 1 && count > 4) {
-					Matrix matrix = new Matrix(l, l2);
+					Linea matrix = new Linea(l, l2);
 					return matrix;
 				}
 			}else {

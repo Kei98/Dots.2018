@@ -4,44 +4,61 @@ import com.NKS.lists.*;
 public class Linea {
 	
 	@SuppressWarnings("rawtypes")
-	public
-	List Punto1;
+	public List punto1;
 	@SuppressWarnings("rawtypes")
-	public
-	List Punto2;
+	public List punto2;
+	@SuppressWarnings("unused")
+	private int lenght;
+	
+	
+	public Linea() {
+		this.punto1 = null;
+		this.lenght = 0;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public Linea(List punto1, List punto2) {
-		this.Punto1 = punto1;
-		this.Punto2 = punto2;
+		this.lenght = 0;
+		this.punto1 = punto1;
+		this.add(punto2);
+		this.punto2 = punto2;
 	}
-//	public void Point(List lineas,int pos,Linea move, Linea conexion) {
-//		if (pos<lineas.getLenght()){
-//			Linea line = (Linea) lineas.getElement(pos);
-//			if (move.Punto2==line.Punto1) {
-//				conexion= new Linea(move.Punto1,line.Punto2);
-//				point2(lineas,0,conexion,"Derecha",1);
-//			
-//				
-//				
-//			}else if(move.Punto1==line.Punto2) {
-//				conexion= new Linea(line.Punto1,move.Punto2);
-//				point2(lineas,0,conexion,"Izquierda",1);
-//				
-//			}else {
-//				Point(lineas,++pos,move,conexion);
+	
+	@SuppressWarnings("rawtypes")
+	public void add(List list) {
+		if(this.punto1 == null) {
+			this.punto1 = list;
+			this.lenght++;
+		}else {
+			if(this.punto1.getLenght() == list.getLenght()) {
+				List temp = this.punto1;
+				while(temp.getNext() != null) {
+					temp = temp.getNext();
+				}
+				temp.setNext(list);
+				this.lenght++;
+			}
+			else {
+				System.out.println("No se puede tener diferente cantidad de entradas");
+			}
+			}
+			
+	}
+	
+	
 	@SuppressWarnings("rawtypes")
 	public void figure(List lineas,int pos,Linea Turn, Linea conexion) {
 		if (pos<lineas.getLenght()){
 			Linea line = (Linea) lineas.getElement(pos);
 
-			if (Turn.Punto2==line.Punto1) {
-				conexion= new Linea(Turn.Punto1,line.Punto2);
+			if (Turn.punto2==line.punto1) {
+				conexion= new Linea(Turn.punto1,line.punto2);
 				figure2(lineas,0,conexion,"Derecha",2);
 			
 				
 				
-			}else if(Turn.Punto1==line.Punto2) {
-				conexion= new Linea(line.Punto1,Turn.Punto2);
+			}else if(Turn.punto1==line.punto2) {
+				conexion= new Linea(line.punto1,Turn.punto2);
 				figure2(lineas,0,conexion,"Izquierda",2);
 				
 			}else {
@@ -56,10 +73,10 @@ public class Linea {
 		if (Dir=="Derecha") {
 			if (pos<lineas.getLenght()) {
 				Linea line= (Linea) lineas.getElement(pos);
-				if(conexion.Punto1==line.Punto2) {
+				if(conexion.punto1==line.punto2) {
 					System.out.println("1hay:"+pts+"puntos");
 				}else {
-					conexion.Punto2=line.Punto2;
+					conexion.punto2=line.punto2;
 					figure2(lineas,++pos,conexion,"Derecha",++pts);
 						}
 			}else {
@@ -68,10 +85,10 @@ public class Linea {
 		}else {
 			if (pos<lineas.getLenght()) {
 				Linea line= (Linea) lineas.getElement(pos);
-				if(conexion.Punto2==line.Punto1) {
+				if(conexion.punto2==line.punto1) {
 					System.out.println("2hay:"+pts+"puntos");
 				}else  {
-					conexion.Punto1=line.Punto1;
+					conexion.punto1=line.punto1;
 					figure2(lineas,++pos,conexion,"Izquierda",++pts);
 				}
 			}else {
@@ -79,9 +96,25 @@ public class Linea {
 			}
 		}
 	}
+	
+	
+	
 	public void printLine() {
-		Punto1.printL();
-		Punto2.printL();
+		punto1.printL();
+		punto2.printL();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public String printLn() {
+		List temp = this.punto1;
+		String line = "[";
+		while(temp.getNext() != null) {
+			line += temp.list() + ",";
+			temp = temp.getNext();
+		}
+		line += temp.list() + "]";
+		System.out.println(line);
+		return line;
 	}
 			
 }

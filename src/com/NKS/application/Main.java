@@ -1,8 +1,15 @@
 package com.NKS.application;
 	
 import java.awt.MouseInfo;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import com.NKS.Puntos.Linea;
+import com.NKS.json.ReadJsonFile;
+import com.NKS.json.WriteJsonFile;
 import com.NKS.lists.List;
 
 import javafx.application.Application;
@@ -13,13 +20,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+//import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
+//import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -28,7 +35,13 @@ public class Main extends Application{
 	public Scene scene,scene2;
 	public Stage window,wind_game;
 	public Button btn1,btn2;
-	public TextField name;
+	private TextField name;
+	
+	public String getName1() {
+		System.out.println(name.getText());
+		return name.getText();
+	}
+
 	public Label name_game,onTurn_label;
 	public Label dot;
 	public Pane game,intro;
@@ -37,23 +50,47 @@ public class Main extends Application{
 	public List<Integer> temp_dot,temp_dot2;
 	public Circle circ,temp_circ,onTurn;
 	public Line line;
-	static List Lineas;
+	
+	static List<Linea> Lineas;
+	@SuppressWarnings("rawtypes")
 	public List elements;
 	static int figure;
 	public int Turn;
+	private int points = 0;
 	
-	public void start(Stage primaryStage) {
+//	Sockets
+	
+	private Socket clientSocket;
+	private DataOutputStream dos;
+	@SuppressWarnings("unused")
+	private DataInputStream dis;
+	
+//	Escritura y lectura de Json
+	
+	private WriteJsonFile out;
+	private ReadJsonFile in;
+	
+//	
+	private Linea adversaryMove;
+	private int adversaryPts;
+	private int count;
+	
+
+	public void start(Stage primaryStage) throws UnknownHostException, IOException, InterruptedException {
 		window = primaryStage;
 		wind_game = new Stage();
+		
 //  	Images
 		ImageView iv = new ImageView(new Image("/Multimedia/Dots.png"));
 		ImageView iv2 = new ImageView(new Image("/Multimedia/dots.jpg"));
 		ImageView play_btn = new ImageView(new Image("/Multimedia/play.png"));
 		ImageView logo = new ImageView(new Image("/Multimedia/Logo.png"));
 		iv2.setPreserveRatio(true);
+		
 //		Panes
 		intro = new Pane();
 		game = new Pane();
+		
 //		Labels and TextFields
 		onTurn_label = new Label("Turn:");
 		onTurn_label.setStyle("-fx-font-size: 20");
@@ -64,9 +101,15 @@ public class Main extends Application{
 		VBox player = new VBox();
 		player.getChildren().addAll(player_name,name);
 		player.setSpacing(15);
+
 //		Scenes
 		scene2 = new Scene(game,700,600);
 		scene = new Scene(intro,500,500);
+		
+		
+//		Inicialización del socket
+		clientSocket = new Socket("localhost", 9000);
+		
 // 		Button Config	
 		btn1 = new Button("Play",play_btn);
 		btn1.setOnAction(e -> {
@@ -90,7 +133,12 @@ public class Main extends Application{
 		onTurn.setRadius(8);
 		game.setOnMouseClicked(e -> { 
 			if(Turn == 0) {
-			Click(0,0);
+			try {
+				Click(0,0);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}});
 		intro.setStyle("-fx-background-color: cornsilk");
 		temp_dot = new List<Integer>();
@@ -162,10 +210,10 @@ public class Main extends Application{
 		window.setTitle("Game");
 		}
 	}
-	public void Click(int j, int i) {
+	public void Click(int j, int i) throws IOException {
 			int x = generateX();
 			int y = generateY();
-			int x2 = MouseInfo.getPointerInfo().getLocation().x-337;
+			int x2 = MouseInfo.getPointerInfo().getLocation().x-334;
 			int y2 = MouseInfo.getPointerInfo().getLocation().y-43;
 			if (num_click == 1) {
 				while(j<dotsx.getLenght() && i<dotsy.getLenght()) {
@@ -234,6 +282,8 @@ public class Main extends Application{
 						j=j+1;}
 				}
 			}
+			count++;
+			this.send(null);
 	}
 			
 	public int generateX(){
@@ -263,13 +313,14 @@ public class Main extends Application{
 			
 		}
 	}
+	@SuppressWarnings("rawtypes")
 	public static void Block(List Punto1, List Punto2, int pos) {
 		if (pos >=Lineas.getLenght()) {
 			figure= 0;
 		}else if (pos<Lineas.getLenght()){
 			Linea test= new Linea(Punto1,Punto2);
 			Linea test2=(Linea) Lineas.getElement(pos);
-			if ((test.Punto1.getElement(0)==test2.Punto1.getElement(0)) && (test.Punto1.getElement(1)==test2.Punto1.getElement(1)) && (test.Punto2.getElement(0)==test2.Punto2.getElement(0)) && (test.Punto2.getElement(1)==test2.Punto2.getElement(1)) || (test.Punto1.getElement(0)==test2.Punto2.getElement(0)) && (test.Punto1.getElement(1)==test2.Punto2.getElement(1)) && (test.Punto2.getElement(0)==test2.Punto1.getElement(0)) && (test.Punto2.getElement(1)==test2.Punto1.getElement(1))) {
+			if ((test.punto1.getElement(0)==test2.punto1.getElement(0)) && (test.punto1.getElement(1)==test2.punto1.getElement(1)) && (test.punto2.getElement(0)==test2.punto2.getElement(0)) && (test.punto2.getElement(1)==test2.punto2.getElement(1)) || (test.punto1.getElement(0)==test2.punto2.getElement(0)) && (test.punto1.getElement(1)==test2.punto2.getElement(1)) && (test.punto2.getElement(0)==test2.punto1.getElement(0)) && (test.punto2.getElement(1)==test2.punto1.getElement(1))) {
 				figure=1;
 			
 			}else {
@@ -285,8 +336,42 @@ public class Main extends Application{
 			onTurn.setFill(Color.RED);
 		}
 	}
-
+	
+	public boolean notEnded() {
+		if(count >= 1) {
+			return false;
+		}else {
+			return true;
+		}
 	}
+	
+	public void send(String message) throws IOException {
+//		Thread t = new Thread() {
+//			public void run() {
+//				try {
+		dos = new DataOutputStream(clientSocket.getOutputStream());
+		out = new WriteJsonFile(getName1(), Lineas.getElement(Lineas.getLenght()-1), 0, this.points, message);
+		dos.writeUTF(out.getJson());
+//				} catch (UnknownHostException e) {
+//					e.printStackTrace();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		};
+//		t.start();
+	}
+	
+	public void recieve() throws IOException {
+		dis = new DataInputStream(clientSocket.getInputStream());
+		in = new ReadJsonFile(dis.readUTF());
+		adversaryMove = in.getLine();
+		adversaryPts = in.getOpPts();
+	}
+	
+}
+	
+
 
 
 
