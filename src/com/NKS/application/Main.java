@@ -27,6 +27,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -155,7 +157,15 @@ public class Main extends Application{
 				e1.printStackTrace();
 			}
 		}});
-		
+//		Polygon polygon = new Polygon();
+//		polygon.getPoints().addAll(new Double[]{
+//		    110.0, 110.0,
+//		    210.0, 110.0,
+//		    210.0, 210.0,
+//		    110.0, 210.0});
+//		Rectangle rect = new Rectangle((5.0-3.0)*100,(5.0-4.0)*100);
+//		rect.setLayoutX(300+10);
+//		rect.setLayoutY(400+10);
 		
 		intro.setStyle("-fx-background-color: cornsilk");
 		temp_dot = new List<Integer>();
@@ -416,7 +426,44 @@ public class Main extends Application{
 		}
 		
 	}
+	
+//	public void blockFigure() {
+//		int i=0;
+//		int j=1;
+//		List<Integer> Try = new List<Integer>();
+//		List<Integer> num_x = new List<Integer>();
+//		List<Integer> num_y = new List<Integer>();
+//		while(i<Try.getLenght()) {
+//			if(num_x.getElement(0) == null) {
+//				num_x.add(Try.getElement(i),0);
+//				num_x.add(Try.getElement(i),1);
+//				i = i+2;
+//			}else if(num_x.getElement(0)<Try.getElement(i)) {
+//				num_x.delete(0);
+//				num_x.add(Try.getElement(i));
+//				i = i+2;
+//			}else if(num_x.getElement(1)>Try.getElement(i)) {
+//				num_x.delete(1);
+//				num_x.add(Try.getElement(i),1);
+//				i = i+2;}	
+//		}
+//		while(j<=Try.getLenght()) {
+//			if(num_y.getElement(0) == null) {
+//				num_y.add(Try.getElement(i),0);
+//				num_y.add(Try.getElement(i),1);
+//				i = i+2;
+//			}else if(num_y.getElement(0)<Try.getElement(i)) {
+//				num_y.delete(0);
+//				num_y.add(Try.getElement(i));
+//				i = i+2;
+//			}else if(num_y.getElement(1)>Try.getElement(i)) {
+//				num_y.delete(1);
+//				num_y.add(Try.getElement(i),1);
+//				i = i+2;}	
+//		}
+//	}
 }
+
 
 
 

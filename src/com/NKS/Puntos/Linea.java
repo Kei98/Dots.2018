@@ -74,7 +74,7 @@ public class Linea {
 			if (pos<lineas.getLenght()) {
 				Linea line= (Linea) lineas.getElement(pos);
 				if(conexion.punto1==line.punto2) {
-					System.out.println("1hay:"+pts+"puntos");
+					System.out.println("hay:"+pts+"puntos");
 				}else {
 					conexion.punto2=line.punto2;
 					figure2(lineas,++pos,conexion,"Derecha",++pts);
