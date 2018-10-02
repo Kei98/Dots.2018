@@ -39,6 +39,7 @@ public class Server {
 				sockets.enqueue(clientSocket);
 				if(sockets.getLenght() == 1) {
 					socketP1 = sockets.peek();
+//					Aquí le envío la info al cliente
 					send(socketP1, "wait");
 				}else if(sockets.getLenght() > 1){
 					socketP1 = sockets.dequeue();
@@ -141,7 +142,6 @@ public class Server {
 //						dos.writeUTF("holi, " + name + ", " + i);
 ////						Thread.sleep(1000);
 //					} catch (IOException e) {
-//						// TODO Auto-generated catch block
 //						e.printStackTrace();
 //					}
 //				}

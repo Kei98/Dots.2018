@@ -27,6 +27,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+//import javafx.scene.shape.Polygon;
+//import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -42,7 +44,7 @@ public class Main extends Application{
 		return name.getText();
 	}
 
-	public Label name_game,onTurn_label;
+	public Label name_game,onTurn_label,point,opPoint;
 	public Label dot;
 	public Pane game,intro;
 	public List<Integer> dotsx,dotsy;
@@ -62,7 +64,6 @@ public class Main extends Application{
 	
 	private Socket clientSocket;
 	private DataOutputStream dos;
-	@SuppressWarnings("unused")
 	private DataInputStream dis;
 	
 //	Escritura y lectura de Json
@@ -94,11 +95,15 @@ public class Main extends Application{
 		game = new Pane();
 		
 //		Labels and TextFields
+		point = new Label("Your Points: 0");
+		opPoint = new Label("Opponent Points: 0");
 		onTurn_label = new Label("Turn:");
 		onTurn_label.setStyle("-fx-font-size: 20");
 		name = new TextField();
 		Label player_name = new Label("Player Name");
 		name_game = new Label("Player: ");
+		point.setStyle("-fx-font-size: 20");
+		opPoint.setStyle("-fx-font-size: 20");
 		name_game.setStyle("-fx-font-size: 20");
 		VBox player = new VBox();
 		player.getChildren().addAll(player_name,name);
@@ -151,7 +156,15 @@ public class Main extends Application{
 				e1.printStackTrace();
 			}
 		}});
-		
+//		Polygon polygon = new Polygon();
+//		polygon.getPoints().addAll(new Double[]{
+//		    110.0, 110.0,
+//		    210.0, 110.0,
+//		    210.0, 210.0,
+//		    110.0, 210.0});
+//		Rectangle rect = new Rectangle((5.0-3.0)*100,(5.0-4.0)*100);
+//		rect.setLayoutX(300+10);
+//		rect.setLayoutY(400+10);
 		
 		intro.setStyle("-fx-background-color: cornsilk");
 		temp_dot = new List<Integer>();
@@ -191,12 +204,16 @@ public class Main extends Application{
 		player.setLayoutY(300);
 		name_game.setLayoutX(10);
 		name_game.setLayoutY(10);
+		point.setLayoutX(280);
+		point.setLayoutY(10);
+		opPoint.setLayoutX(280);
+		opPoint.setLayoutY(560);
 		onTurn_label.setLayoutX(500);
 		onTurn_label.setLayoutY(30);
 		onTurn.setLayoutX(570);
 		onTurn.setLayoutY(45);
 //		Place
-		game.getChildren().addAll(btn2,name_game,onTurn_label,onTurn);
+		game.getChildren().addAll(btn2,name_game,onTurn_label,onTurn,point,opPoint);
 		intro.getChildren().addAll(iv2,logo,btn1,player);
 //		Window config
 		window.setResizable(false);
@@ -275,6 +292,7 @@ public class Main extends Application{
 										temp_dot.delete(0);
 										temp_dot2.delete(0);
 										temp_dot2.delete(0);
+										Turn=1;
 										onTurn();
 										j = dotsx.getLenght();	
 									}else {
@@ -396,7 +414,6 @@ public class Main extends Application{
 			temp_dot.delete(0);
 			temp_dot.delete(0);
 			temp_circ.setFill(Color.BLACK);
-		}else {
 			
 		}
 		
@@ -409,7 +426,44 @@ public class Main extends Application{
 		}
 		
 	}
+	
+//	public void blockFigure() {
+//		int i=0;
+//		int j=1;
+//		List<Integer> Try = new List<Integer>();
+//		List<Integer> num_x = new List<Integer>();
+//		List<Integer> num_y = new List<Integer>();
+//		while(i<Try.getLenght()) {
+//			if(num_x.getElement(0) == null) {
+//				num_x.add(Try.getElement(i),0);
+//				num_x.add(Try.getElement(i),1);
+//				i = i+2;
+//			}else if(num_x.getElement(0)<Try.getElement(i)) {
+//				num_x.delete(0);
+//				num_x.add(Try.getElement(i));
+//				i = i+2;
+//			}else if(num_x.getElement(1)>Try.getElement(i)) {
+//				num_x.delete(1);
+//				num_x.add(Try.getElement(i),1);
+//				i = i+2;}	
+//		}
+//		while(j<=Try.getLenght()) {
+//			if(num_y.getElement(0) == null) {
+//				num_y.add(Try.getElement(i),0);
+//				num_y.add(Try.getElement(i),1);
+//				i = i+2;
+//			}else if(num_y.getElement(0)<Try.getElement(i)) {
+//				num_y.delete(0);
+//				num_y.add(Try.getElement(i));
+//				i = i+2;
+//			}else if(num_y.getElement(1)>Try.getElement(i)) {
+//				num_y.delete(1);
+//				num_y.add(Try.getElement(i),1);
+//				i = i+2;}	
+//		}
+//	}
 }
+
 
 
 
