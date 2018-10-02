@@ -294,6 +294,7 @@ public class Main extends Application{
 				}
 			}
 			count++;
+//			Envío info al server
 			this.send(null);
 	}
 			

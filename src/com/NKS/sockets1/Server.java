@@ -40,7 +40,7 @@ public class Server {
 				if(sockets.getLenght() == 1) {
 					socketP1 = sockets.peek();
 					send(socketP1, "wait");
-				}else {
+				}else if(sockets.getLenght() > 1){
 					socketP1 = sockets.dequeue();
 					socketP2 = sockets.dequeue();
 					send(socketP1, "start");
