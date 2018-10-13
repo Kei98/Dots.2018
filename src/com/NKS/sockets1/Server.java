@@ -168,6 +168,8 @@ public class Server {
 				this.send(socketP1, "");
 			}else if(in.getMessage().equals("1")) {
 				this.message = "1";
+			}else if(in.getMessage().equals("")) {
+				
 			}
 		}
 		System.out.println("Sale con éxito");

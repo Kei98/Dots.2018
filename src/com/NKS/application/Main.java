@@ -267,6 +267,7 @@ public class Main extends Application{
 				}
 //				System.out.println("Pos sí se cumple");
 				Thread.sleep(100);
+				this.send("");
 				this.recieve();
 				this.onTurn();
 //				Thread.sleep(50);
@@ -274,15 +275,20 @@ public class Main extends Application{
 				if(this.playerNumber == 2) {
 					this.send("");
 					if(countt == 0) {
-						while(!onTurn()) {
-							try {
-								this.recieve();
-								System.out.println("en el while");
-								Thread.sleep(1000);
-							} catch (IOException | InterruptedException e1) {
-								e1.printStackTrace();
-							}
-						}
+//						Thread t = new Thread() {
+//							public void run() {
+								while(!onTurn()) {
+									try {
+										recieve();
+										System.out.println("en el while");
+										Thread.sleep(1000);
+									} catch (IOException | InterruptedException e1) {
+										e1.printStackTrace();
+									}
+								}
+//							}
+//						};
+//						t.start();
 					}
 				}
 			}
@@ -293,7 +299,6 @@ public class Main extends Application{
 		}
 	}
 	public void Click(int j, int i) throws IOException, InterruptedException {
-//		this.recieve();
 		if(onTurn()) {
 			int x = generateX();
 			int y = generateY();
@@ -314,92 +319,87 @@ public class Main extends Application{
 							num_click = 2;
 							j = dotsx.getLenght();
 						}else {
-							i=i+1;
-							}
+							i=i+1;}
 					}else {
-						j=j+1;
-						}
+						j=j+1;}
 				}
 			}
 			if (num_click == 2) {
 				i = 0;
 				j = 0;
-				System.out.println("HOLO");
 				while(j<dotsx.getLenght() && i<dotsy.getLenght()) {
-					System.out.println("HOLO2");
+					System.out.println("HOLO");
 					if(x2 <= dotsx.getElement(j)+20 && x2 >= dotsx.getElement(j) ) {
-						System.out.println("Entra 1");
+						System.out.println("HOLO2");
 						if(y2 <= dotsy.getElement(i)+20 && y2 >= dotsy.getElement(i) ) {
-							System.out.println("Entra al 2");
+							System.out.println("HOLO3");
 							if(Math.abs(x - temp_dot.getElement(0)) <= 1 && Math.abs(y - temp_dot.getElement(1)) <= 1) {
-								System.err.println("Entra al 3");
+								System.out.println("HOLO4");
 								if(x - temp_dot.getElement(0) != 0 || y - temp_dot.getElement(1) != 0){
-									System.out.println("Entra al 4");
+									System.out.println("HOLO5");
 									temp_dot2.add(x);
 									temp_dot2.add(y);
 									Block(temp_dot,temp_dot2,0);
 									if(figure == 0) {
-										System.out.println("Entra al 5");
-										Thread t = new Thread() {
-											public void run() {
-												temp_circ.setFill(Color.BLACK);
-												line = new Line(temp_dot.getElement(0)*100+10,temp_dot.getElement(1)*100+10,temp_dot2.getElement(0)*100+10,temp_dot2.getElement(1)*100+10);
-												line.setStrokeWidth(7);
-												game.getChildren().addAll(line);
-												num_click = 1;
-												List<Integer> a = new List<Integer>();
-												a.add(temp_dot.getElement(0));
-												a.add(temp_dot.getElement(1));
-												List<Integer> b = new List<Integer>();
-												b.add(temp_dot2.getElement(0));
-												b.add(temp_dot2.getElement(1));
-												Linea temp_line = new Linea(a,b);
-												Lineas.add(temp_line);
-												temp_dot.delete(0);
-												temp_dot.delete(0);
-												temp_dot2.delete(0);
-												temp_dot2.delete(0);
-											}
-										};
-										t.start();
-
-										System.out.println("Incrementa turn");
-										Turn++;
+										System.out.println("HOLO6");
+										temp_circ.setFill(Color.BLACK);
+										line = new Line(temp_dot.getElement(0)*100+10,temp_dot.getElement(1)*100+10,temp_dot2.getElement(0)*100+10,temp_dot2.getElement(1)*100+10);
+										line.setStrokeWidth(7);
+										game.getChildren().addAll(line);
+										num_click = 1;
+										List<Integer> a = new List<Integer>();
+										a.add(temp_dot.getElement(0));
+										a.add(temp_dot.getElement(1));
+										List<Integer> b = new List<Integer>();
+										b.add(temp_dot2.getElement(0));
+										b.add(temp_dot2.getElement(1));
+										Linea temp_line = new Linea(a,b);
+										Lineas.add(temp_line);
+										temp_dot.delete(0);
+										temp_dot.delete(0);
+										temp_dot2.delete(0);
+										temp_dot2.delete(0);
+										
+//										Turn = 1;
 //										onTurn();
-										j = dotsx.getLenght();
+										System.out.println("Envío al server");
+										this.send("");
+										Turn++;
+										j = dotsx.getLenght();	
+//										break;
+//										while(!onTurn()) {
+//											System.out.println("Entra while Click");
+//											this.recieve();
+//											Thread.sleep(1000);
+//										}
 									}else {
-										System.out.println("Entra else 5");
+										System.out.println("ELSE6");
 										temp_dot2.delete(0);
 										temp_dot2.delete(0);
 										j = dotsx.getLenght();
 									}
 								}else {
-									System.out.println("Entra else 4");
+									System.out.println("ELSE5");
 									j = dotsx.getLenght();
 									}
 							}else {
-								System.out.println("Entra else 3");
+								System.out.println("ELSE4");
 								j = dotsx.getLenght();}
 							
 						}else {
-							System.out.println("Entra else 2");
+							System.out.println("ELSE3");
 							i=i+1;}
 					}else {
-						System.out.println("Entra else 1");
+						System.out.println("ELSE2");
 						j=j+1;
 					}
 					
 				}
 			}
 //			Envío info al server
-
-			System.out.println("Envío al server");
-			this.send("");
-			while(!onTurn()) {
-				System.out.println("Entra while Click");
-				this.recieve();
-				Thread.sleep(1000);
-			}
+			
+		}else {
+			System.out.println("No está en turno");
 		}
 			
 	}
