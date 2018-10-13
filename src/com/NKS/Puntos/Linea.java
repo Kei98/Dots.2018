@@ -9,6 +9,7 @@ public class Linea {
 	public List punto2;
 	@SuppressWarnings("unused")
 	private int lenght;
+	private boolean figure;
 	
 	
 	public Linea() {
@@ -25,17 +26,17 @@ public class Linea {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public void add(List list) {
+	public void add(List point) {
 		if(this.punto1 == null) {
-			this.punto1 = list;
+			this.punto1 = point;
 			this.lenght++;
 		}else {
-			if(this.punto1.getLenght() == list.getLenght()) {
+			if(this.punto1.getLenght() == point.getLenght()) {
 				List temp = this.punto1;
 				while(temp.getNext() != null) {
 					temp = temp.getNext();
 				}
-				temp.setNext(list);
+				temp.setNext(point);
 				this.lenght++;
 			}
 			else {
@@ -47,62 +48,69 @@ public class Linea {
 	
 	
 	@SuppressWarnings("rawtypes")
-	public void figure(List lineas,int pos,Linea Turn, Linea conexion) {
+	public boolean figure(List lineas,int pos,Linea Turn, Linea conexion) {
 		if (pos<lineas.getLenght()){
 			Linea line = (Linea) lineas.getElement(pos);
 
 			if (Turn.punto2==line.punto1) {
 				conexion= new Linea(Turn.punto1,line.punto2);
-				figure2(lineas,0,conexion,"Derecha",2);
+				return figure2(lineas,0,conexion,"Derecha",2);
 			
 				
 				
 			}else if(Turn.punto1==line.punto2) {
 				conexion= new Linea(line.punto1,Turn.punto2);
-				figure2(lineas,0,conexion,"Izquierda",2);
+				return figure2(lineas,0,conexion,"Izquierda",2);
 				
 			}else {
-				figure(lineas,++pos,Turn,conexion);
+				return figure(lineas,++pos,Turn,conexion);
 			}
 		}else {
 			System.out.println("no hay figura1");
+			this.figure = false;
+			return this.figure;
 		}
 	}
 	@SuppressWarnings("rawtypes")
-	public synchronized void  figure2(List lineas,int pos, Linea conexion,String Dir,int pts) {
+	public synchronized boolean  figure2(List lineas,int pos, Linea conexion,String Dir,int pts) {
 		if (Dir=="Derecha") {
 			if (pos<lineas.getLenght()) {
 				Linea line= (Linea) lineas.getElement(pos);
 				if(conexion.punto1==line.punto2) {
 					System.out.println("hay:"+pts+"puntos");
+					this.figure = true;
 				}else {
 					conexion.punto2=line.punto2;
 					figure2(lineas,++pos,conexion,"Derecha",++pts);
 						}
-			}else {
+				}else {
+					this.figure = false;
 				System.out.println("no hay figura");
 					}
 		}else {
 			if (pos<lineas.getLenght()) {
 				Linea line= (Linea) lineas.getElement(pos);
 				if(conexion.punto2==line.punto1) {
-					System.out.println("2hay:"+pts+"puntos");
+					System.out.println("hay:"+pts+"puntos");
+					this.figure = true;
 				}else  {
 					conexion.punto1=line.punto1;
 					figure2(lineas,++pos,conexion,"Izquierda",++pts);
 				}
 			}else {
 				System.out.println("no hay figura2");
+				this.figure = false;
 			}
 		}
+		return this.figure;
 	}
 	
 	
 	
-	public void printLine() {
-		punto1.printL();
-		punto2.printL();
-	}
+//	public void printLine() {
+//		punto1.printL();
+//		punto2.printL();
+//	}
 	
 	@SuppressWarnings("rawtypes")
 	public String printLn() {

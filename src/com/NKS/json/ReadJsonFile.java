@@ -25,10 +25,9 @@ public class ReadJsonFile {
 		this.name = obj.getString("name");
 		String smatrix = obj.getString("list");
 		this.message = obj.getString("message");
-//		System.out.println(smatrix);
 		this.opPts = obj.getInt("adversaryPts");
 		this.pts = obj.getInt("points");
-		if(smatrix.equals(" ")) {
+		if(smatrix.equals(" ") || smatrix.equals(null)) {
 			this.nmatrix = null;
 		}else {
 			this.nmatrix = toMatrix(smatrix);

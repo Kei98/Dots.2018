@@ -40,7 +40,7 @@ public class Main extends Application{
 	private TextField name;
 	
 	public String getName1() {
-		System.out.println(name.getText());
+//		System.out.println(name.getText());
 		return name.getText();
 	}
 
@@ -57,7 +57,7 @@ public class Main extends Application{
 	@SuppressWarnings("rawtypes")
 	public List elements;
 	static int figure;
-	public int Turn;
+	public int Turn = 0;
 	private int points = 0;
 	
 //	Sockets
@@ -72,11 +72,17 @@ public class Main extends Application{
 	private ReadJsonFile in;
 	
 //	
-	@SuppressWarnings("unused")
 	private Linea adversaryMove;
 	@SuppressWarnings("unused")
 	private int adversaryPts;
+	@SuppressWarnings("unused")
+	private int myPoints;
+	private int playerNumber;
+	
 	private int count;
+	@SuppressWarnings("unused")
+	private int countt = 0;
+	private String message = null;
 	
 
 	public void start(Stage primaryStage) throws UnknownHostException, IOException, InterruptedException {
@@ -120,9 +126,20 @@ public class Main extends Application{
 // 		Button Config	
 		btn1 = new Button("Play",play_btn);
 		btn1.setOnAction(e -> {
-			onTurn();
-			createcircles();
-			verify();	
+			try {
+//				System.out.println(Thread.currentThread());
+				this.verify();
+				while(true) {
+//					System.out.println(Thread.currentThread());
+					if(this.message.equals("begin")) {
+						System.out.println("Entra al equals de begin");
+						createcircles();
+						break;
+					}
+				}
+			} catch (IOException | InterruptedException e1) {
+				e1.printStackTrace();
+			}			
 		});
 		btn1.setContentDisplay(ContentDisplay.CENTER);
 		btn1.setStyle("-fx-background-color: transparent; -fx-font-size: 30; -fx-font-color: white");
@@ -139,23 +156,30 @@ public class Main extends Application{
 		});
 //		Others
 		num_click = 1;
-		Turn = 0;
+//		Turn = 0;
 		onTurn = new Circle();
 		onTurn.setRadius(8);
 		game.setOnMouseClicked(e -> { 
-			if(Turn == 0) {
 			try {
-				Click(0,0);
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				this.recieve();
+			} catch (IOException | InterruptedException e2) {
+				e2.printStackTrace();
 			}
-				
-			try {
-				clickButton(e);
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(onTurn()) {
+				try {
+					Click(0,0);
+				} catch (IOException | InterruptedException e1) {
+					e1.printStackTrace();
+				}
+
+				try {
+					clickButton(e);
+				} catch (IOException | InterruptedException e1) {
+					e1.printStackTrace();
+				}
 			}
-		}});
+		}
+				);
 //		Polygon polygon = new Polygon();
 //		polygon.getPoints().addAll(new Double[]{
 //		    110.0, 110.0,
@@ -169,7 +193,7 @@ public class Main extends Application{
 		intro.setStyle("-fx-background-color: cornsilk");
 		temp_dot = new List<Integer>();
 		temp_dot2 = new List<Integer>();
-		Lineas = new List<>();
+		Lineas = new List<Linea>();
 //		Dots
 		dotsx = new List<Integer>();
 		dotsx.add(100);
@@ -223,6 +247,8 @@ public class Main extends Application{
 		window.show();
 		wind_game.initStyle(StageStyle.UNDECORATED);
 		wind_game.setScene(scene2);
+		System.out.println("Segundo recieve");
+		this.recieve();
 		}
 	
 	
@@ -230,17 +256,45 @@ public class Main extends Application{
 		launch(args);
 	}
 
-	public void verify() {
+	public void verify() throws IOException, InterruptedException {
 		if(name.getText().equals("")){
-		AlertBox.show("Error", "You must introduce a name");
+			AlertBox.show("Error", "You must introduce a name");
 		}else {
-		name_game.setText("Player: "+ name.getText());
-		window.close();
-		wind_game.show();
-		window.setTitle("Game");
+			System.out.println("Primero");
+			if(this.message == null || !this.message.equals("begin")) {
+				if(this.playerNumber == 1) {
+					this.send("1");
+				}
+//				System.out.println("Pos sí se cumple");
+				Thread.sleep(100);
+				this.recieve();
+				this.onTurn();
+//				Thread.sleep(50);
+			}else if(this.message.equals("begin")) {
+				if(this.playerNumber == 2) {
+					this.send("");
+					if(countt == 0) {
+						while(!onTurn()) {
+							try {
+								this.recieve();
+								System.out.println("en el while");
+								Thread.sleep(1000);
+							} catch (IOException | InterruptedException e1) {
+								e1.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+//			name_game.setText("Player: "+ name.getText());
+//			window.close();
+//			wind_game.show();
+//			window.setTitle("Game");
 		}
 	}
-	public void Click(int j, int i) throws IOException {
+	public void Click(int j, int i) throws IOException, InterruptedException {
+//		this.recieve();
+		if(onTurn()) {
 			int x = generateX();
 			int y = generateY();
 			int x2 = MouseInfo.getPointerInfo().getLocation().x-334;
@@ -292,9 +346,10 @@ public class Main extends Application{
 										temp_dot.delete(0);
 										temp_dot2.delete(0);
 										temp_dot2.delete(0);
-										Turn=1;
-										onTurn();
+//										Turn = 1;
+//										onTurn();
 										j = dotsx.getLenght();	
+//										break;
 									}else {
 										temp_dot2.delete(0);
 										temp_dot2.delete(0);
@@ -308,12 +363,22 @@ public class Main extends Application{
 						}else {
 							i=i+1;}
 					}else {
-						j=j+1;}
+						j=j+1;
+					}
+					
 				}
+				Turn++;
 			}
-			count++;
 //			Envío info al server
-			this.send(null);
+			System.out.println("Envío al server");
+			this.send("");
+			while(!onTurn()) {
+				System.out.println("Entra while Click");
+				this.recieve();
+				Thread.sleep(1000);
+			}
+		}
+			
 	}
 			
 	public int generateX(){
@@ -325,27 +390,30 @@ public class Main extends Application{
 		return y/100;
 			}
 	public void createcircles() {
-		int i = 110;
-		int j = 110;
-		while (i < 710) {
-			if (j < 610) {
-				circ = new Circle();
-				circ.setLayoutX(i);
-				circ.setLayoutY(j);
-				circ.setRadius(10);
-				game.getChildren().addAll(circ);
-				j = j+100;
-			}else {
-				i = i+100;
-				j = 110;
-			}
-			
-			
-		}
+//		Thread t = new Thread() {
+//			public void run() {
+				int i = 110;
+				int j = 110;
+				while (i < 710) {
+					if (j < 610) {
+						circ = new Circle();
+						circ.setLayoutX(i);
+						circ.setLayoutY(j);
+						circ.setRadius(10);
+						game.getChildren().addAll(circ);
+						j = j+100;
+					}else {
+						i = i+100;
+						j = 110;
+					}
+				}
+//			}
+//		};
+//		t.start();
 	}
 	@SuppressWarnings("rawtypes")
 	public static void Block(List Punto1, List Punto2, int pos) {
-		if (pos >=Lineas.getLenght()) {
+		if (pos >= Lineas.getLenght()) {
 			figure= 0;
 		}else if (pos<Lineas.getLenght()){
 			Linea test= new Linea(Punto1,Punto2);
@@ -359,44 +427,111 @@ public class Main extends Application{
 			}
 		}
 	}
-	public void onTurn() {
-		if (Turn == 0){
-			onTurn.setFill(Color.GREEN);
-		}else if(Turn == 1) {
+	public boolean onTurn() {
+		boolean turn2 = false;
+		if (Turn % 2 == 0){
 			onTurn.setFill(Color.RED);
+			System.out.println(turn2);
+		}else if(Turn % 2 == 1) {
+			onTurn.setFill(Color.GREEN);
+			turn2 = true;
+			countt++;
 		}
+		System.out.println("Final onTurn()");
+		return turn2;
+		
 	}
 	
 	public boolean notEnded() {
-		if(count >= 1) {
+		if(count >= 10) {
 			return false;
 		}else {
 			return true;
 		}
 	}
 	
-	public void send(String message) throws IOException {
-//		Thread t = new Thread() {
-//			public void run() {
-//				try {
-		dos = new DataOutputStream(clientSocket.getOutputStream());
-		out = new WriteJsonFile(getName1(), Lineas.getElement(Lineas.getLenght()-1), 0, this.points, message);
-		dos.writeUTF(out.getJson());
-//				} catch (UnknownHostException e) {
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		};
-//		t.start();
+	public synchronized void send(String message) throws IOException {
+		Thread t = new Thread() {
+			public void run() {
+				try {
+					dos = new DataOutputStream(clientSocket.getOutputStream());
+//					System.out.println(Lineas.getLenght());
+					out = new WriteJsonFile(getName1(), (Lineas.getLenght() > 0) ? Lineas.getElement(Lineas.getLenght()-1) : null, 0, points, message);
+					dos.writeUTF(out.getJson());
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		t.start();
 	}
 	
-	public void recieve() throws IOException {
+	@SuppressWarnings({ "unchecked", "static-access" })
+	public synchronized void recieve() throws IOException, InterruptedException {
 		dis = new DataInputStream(clientSocket.getInputStream());
-		in = new ReadJsonFile(dis.readUTF());
-		adversaryMove = in.getLine();
-		adversaryPts = in.getOpPts();
+		String iN = dis.readUTF();
+		if(iN != null) {
+			in = new ReadJsonFile(iN);
+			System.out.println("Entra a recieve" + in.getMessage());
+//			adversaryMove = in.getLine();
+			if(in.getMessage().equals("1")) {
+				System.out.println("1");
+				this.playerNumber = 1;
+				System.out.println(Turn);
+			}else if(in.getMessage().equals("2")) {
+				System.out.println("2");
+				this.playerNumber = 2;
+				this.countt++;
+				System.out.println(Turn);
+			}else if(in.getMessage().equals("wait")) {
+//				this.message = "wait";
+				AlertBox mes = new AlertBox();
+				mes.show("Wait!", "Waiting for player 2");
+			}else if(in.getMessage().equals(" ")) {
+				name_game.setText("Player: "+ name.getText());
+				window.close();
+				wind_game.show();
+				window.setTitle("Game");
+				this.message = "begin";
+				verify();
+//				Thread t = new Thread() {
+//					public void run() {
+//						createcircles();
+//					}
+//				};
+//				t.start();
+				
+				if(this.playerNumber == 1) {
+					this.Turn++;
+				}
+				
+			}else if(in.getLine() != null && in.getMessage() != "figure") {
+				this.adversaryMove = in.getLine();
+				this.drawOpponentLine(adversaryMove.punto1, adversaryMove.punto2);
+				if(in.getMessage().equals("advFigure")) {
+//					Bloquear figura
+					adversaryPts = in.getOpPts();
+					myPoints = in.getPts();
+					System.out.println("Turn inicial");
+					this.Turn++;
+					return;
+				}
+				System.out.println("Turn final");
+				this.Turn++;
+			}else if(in.getMessage().equals("figure")) {
+//				Bloquear
+				adversaryPts = in.getOpPts();
+				myPoints = in.getPts();
+			}else if(in.getMessage().equals("")) {
+				onTurn();
+			}else if(in.getMessage().equals("yourTurn")) {
+				Turn++;
+				onTurn();
+			}
+		}
+		
 	}
 	
 	
@@ -418,7 +553,7 @@ public class Main extends Application{
 		}
 		
 	}
-	public void clickButton(MouseEvent event) throws IOException {
+	public void clickButton(MouseEvent event) throws IOException, InterruptedException {
 		if (event.getButton() == MouseButton.SECONDARY) {
 			clean();
 		}if (event.getButton() == MouseButton.PRIMARY) {
