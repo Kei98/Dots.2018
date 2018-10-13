@@ -80,7 +80,6 @@ public class Main extends Application{
 	private int playerNumber;
 	
 	private int count;
-	@SuppressWarnings("unused")
 	private int countt = 0;
 	private String message = null;
 	
@@ -275,20 +274,15 @@ public class Main extends Application{
 				if(this.playerNumber == 2) {
 					this.send("");
 					if(countt == 0) {
-//						Thread t = new Thread() {
-//							public void run() {
-								while(!onTurn()) {
-									try {
-										recieve();
-										System.out.println("en el while");
-										Thread.sleep(1000);
-									} catch (IOException | InterruptedException e1) {
-										e1.printStackTrace();
-									}
-								}
-//							}
-//						};
-//						t.start();
+						while(!onTurn()) {
+							try {
+								recieve();
+								System.out.println("en el while");
+								Thread.sleep(1000);
+							} catch (IOException | InterruptedException e1) {
+								e1.printStackTrace();
+							}
+						}
 					}
 				}
 			}
@@ -364,14 +358,25 @@ public class Main extends Application{
 //										onTurn();
 										System.out.println("Envío al server");
 										this.send("");
+										if(playerNumber == 2) {
+											this.send("");
+										}
 										Turn++;
-										j = dotsx.getLenght();	
-//										break;
-//										while(!onTurn()) {
-//											System.out.println("Entra while Click");
-//											this.recieve();
-//											Thread.sleep(1000);
-//										}
+										j = dotsx.getLenght();
+										Thread t = new Thread() {
+											public void run() {
+												while(!onTurn()) {
+													try {
+														System.out.println("Entra al while!!!!");
+														recieve();
+														Thread.sleep(2000);
+													} catch (IOException | InterruptedException e) {
+														e.printStackTrace();
+													}
+												}
+											}
+										};
+										t.start();
 									}else {
 										System.out.println("ELSE6");
 										temp_dot2.delete(0);
@@ -497,6 +502,7 @@ public class Main extends Application{
 		String iN = dis.readUTF();
 		if(iN != null) {
 			in = new ReadJsonFile(iN);
+			System.out.println(in.getLine());
 			System.out.println("Entra a recieve" + in.getMessage());
 //			adversaryMove = in.getLine();
 			if(in.getMessage().equals("1")) {
@@ -530,9 +536,16 @@ public class Main extends Application{
 					this.Turn++;
 				}
 				
-			}else if(in.getLine() != null && in.getMessage() != "figure") {
+			}else if(in.getLine() != null && !in.getMessage().equals("figure") ) {
+				System.out.println("SÍ ENTRA");
 				this.adversaryMove = in.getLine();
-				this.drawOpponentLine(adversaryMove.punto1, adversaryMove.punto2);
+				System.out.println("Draw");
+				Thread t = new Thread() {
+					public void run() {
+						drawOpponentLine(adversaryMove.punto1, adversaryMove.punto2);
+					}
+				};
+				t.start();
 				if(in.getMessage().equals("advFigure")) {
 //					Bloquear figura
 					adversaryPts = in.getOpPts();
@@ -543,13 +556,21 @@ public class Main extends Application{
 				}
 				System.out.println("Turn final");
 				this.Turn++;
+				onTurn();
 			}else if(in.getMessage().equals("figure")) {
+				System.out.println("ENTRA SEGUNDO else if");
 //				Bloquear
 				adversaryPts = in.getOpPts();
 				myPoints = in.getPts();
-			}else if(in.getMessage().equals("")) {
+			}else if(in.getMessage().equals("") && in.getLine() == null) {
+//				if(in.getLine() != null) {
+//					drawOpponentLine(in.getLine().punto1, in.getLine().punto2);
+//					Turn++;
+//				}
+				System.out.println("ENTRA TERCER else if");
 				onTurn();
 			}else if(in.getMessage().equals("yourTurn")) {
+				System.out.println("ENTRA CUARTO else if");
 				Turn++;
 				onTurn();
 			}

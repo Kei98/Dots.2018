@@ -28,7 +28,11 @@ public class WriteJsonFile {
 		}else {
 			jsonObject.put("list", " ");
 		}
-
+//		System.out.println(name);
+//		System.out.println(nmatrix);
+//		System.out.println(opPts);
+//		System.out.println(pts);
+//		System.out.println(tmessage);
 	}
 	
 	public JSONObject getJsonObject() {

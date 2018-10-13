@@ -21,28 +21,24 @@ public class Server {
 	private int port = 9000;
 	private Socket socketP1 = null;
 	private Socket socketP2 = null;
-//	private String p1;
-//	private String p2;
+	private String p1;
+	private String p2;
 	private int p1Pts;
 	private int p2Pts;
 	private Queue<Socket> sockets = new Queue<Socket>();
-	@SuppressWarnings("unused")
-	private String name = null;
 	private static List<Linea> lineas = new List<Linea>();
 	private boolean line = false;
-	
+	private int count = 0;
 	private String message = null;
 	
-	private Server() {
-		
-	}
+	
 
 	@SuppressWarnings({ "resource", "static-access" })
 	public void start() throws InterruptedException {
 		try {
 			ServerSocket serverSocket = new ServerSocket(port);
 			int n = 0;
-//			int n2 = 0;
+			int n2 = 0;
 			while(true) {
 				Thread t = new Thread() {
 					public void run() {
@@ -62,14 +58,14 @@ public class Server {
 				if(sockets.getLenght() == 1) {
 					if(socketP1 == null) {
 						socketP1 = sockets.peek();
-						send(socketP1, "1");
+						send(socketP1, "1", "h");
 					}else if(socketP1 != null && socketP2 == null){
 						System.out.println("Entra para recibir");
 						this.recieve(socketP1);
 						System.out.println("Recibió el mensaje");
 						if(this.message.equals("1")) {
 							System.out.println("Entra al if de que recibió el mensaje");
-							send(socketP1, "wait");
+							send(socketP1, "wait", p1);
 							this.message = null;
 						}
 					}
@@ -78,12 +74,12 @@ public class Server {
 					socketP1 = sockets.dequeue();
 					socketP2 = sockets.dequeue();
 					System.out.println("envía a ambos clientes");
-					send(socketP1, " ");
+					send(socketP1, " ", p1);
 					System.out.println("A 2");
-					send(socketP2, "2");
+					send(socketP2, "2", "h");
 					Thread.sleep(100);
-//					this.recieve(socketP2);
-					send(socketP2, " ");
+					this.recieve(socketP2);
+					send(socketP2, " ", "h");
 					n++;
 //					n2++;
 				}
@@ -92,17 +88,34 @@ public class Server {
 					if(n == 1 || n == 2 || n == 4 || n == 5) {
 						System.out.println("Recibe de 1");
 						this.recieve(socketP1);
-						this.send(socketP1, "");
+						if(n2 == 0) {
+							this.send(socketP1, "", p1);
+						}
 						n++;
+						if(n == 2 && n2 > 0) {
+							this.send(socketP1, "yourTurn", p1);
+						}
+						if(n == 5) {
+							this.send(socketP2, "", p2);
+						}
+						
 					}
 				}
 				if(socketP2 != null) {
 					if(n == 1 || n == 3 || n == 6) {
 						if(n == 3) {
-							this.send(socketP2, "yourTurn");
+							this.send(socketP2, "yourTurn", p2);
 						}else {
+							this.send(socketP2, "", p2);
 							System.out.println("Recibe de 2");
 							this.recieve(socketP2);
+							if(n == 7) {
+								this.recieve(socketP2);
+								n = 2;
+								n2++;
+								this.send(socketP1, "", p1);
+								return;
+							}
 						}
 						System.out.println("Incrementa el n");
 						n++;
@@ -115,17 +128,19 @@ public class Server {
 		}
 	}
 
-	public synchronized void send(Socket clientSocket, String message) throws IOException {
+	public synchronized void send(Socket clientSocket, String message, String name1) throws IOException {
 		Thread t = new Thread() {
 			public void run() {
 				try {
 					DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-					if(lineas.getLenght() > 1) {
+					if(lineas.getLenght() >= 1) {
 						System.out.println("Está cuando es != null" + lineas.getLenght());
-						WriteJsonFile out = new WriteJsonFile("holo", lineas.getElement(lineas.getLenght()-1), clientSocket == socketP1 ? p2Pts : p1Pts, clientSocket == socketP1 ? p1Pts : p2Pts, message);
+//						lineas.getElement(lineas.getLenght() -1).printLn();
+						WriteJsonFile out = new WriteJsonFile(name1, lineas.getElement(lineas.getLenght()-1), clientSocket == socketP1 ? p2Pts : p1Pts, clientSocket == socketP1 ? p1Pts : p2Pts, message);
 						dos.writeUTF(out.getJson());
+//						System.out.println(out.getJson());
 					}else {
-						WriteJsonFile out = new WriteJsonFile("holo", null, clientSocket == socketP1 ? p2Pts : p1Pts, clientSocket == socketP1 ? p1Pts : p2Pts, message);
+						WriteJsonFile out = new WriteJsonFile(name1, null, clientSocket == socketP1 ? p2Pts : p1Pts, clientSocket == socketP1 ? p1Pts : p2Pts, message);
 						dos.writeUTF(out.getJson());
 					}
 
@@ -146,30 +161,46 @@ public class Server {
 			System.out.println("Entra if readUTF");
 			ReadJsonFile in = new ReadJsonFile(disStr);
 			System.out.println("Aún no pasa algo");
+			if(in.getName() != null && count < 2) {
+				if(clientSocket == socketP1 && count == 0) {
+					p1 = in.getName();
+					count++;
+				}else if(clientSocket == socketP2 && count == 1) {
+					p2 = in.getName();
+					count++;
+				}
+			}
 			if(clientSocket == socketP1 && in.getLine() != null) {
 				System.out.println("Entra al if");
-//				p1 = in.getName();
+				p1 = in.getName();
 				this.makeLine(in.getLine().punto1, in.getLine().punto2);
 				if(this.line) {
-					this.send(socketP2, "advFigure");
-					this.send(socketP1, "figure");
+					this.send(socketP2, "advFigure", p2);
+					this.send(socketP1, "figure", p1);
 					return;
 				}
-				this.send(socketP2, null);
+				this.send(socketP2, "", p2);
 			}else if(clientSocket == socketP2 && in.getLine() != null){
 				System.out.println("Entra al else if");
-//				p2 = in.getName();
+				p2 = in.getName();
 				this.makeLine(in.getLine().punto1, in.getLine().punto2);
 				if(this.line) {
-					this.send(socketP1, "advFigure");
-					this.send(socketP2, "figure");
+					this.send(socketP1, "advFigure", p1);
+					this.send(socketP2, "figure", p2);
 					return;
 				}
-				this.send(socketP1, "");
+				this.send(socketP1, "", p1);
 			}else if(in.getMessage().equals("1")) {
 				this.message = "1";
+				if(clientSocket == socketP1) {
+					System.out.println(in.getName());
+					p1 = in.getName();
+				}
 			}else if(in.getMessage().equals("")) {
-				
+				if(count == 0 && clientSocket == socketP2) {
+					System.out.println(in.getName());
+					p2 = in.getName();
+				}
 			}
 		}
 		System.out.println("Sale con éxito");
